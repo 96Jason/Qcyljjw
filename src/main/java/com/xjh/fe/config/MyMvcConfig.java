@@ -1,13 +1,13 @@
 package com.xjh.fe.config;
 
 import com.xjh.fe.utils.LoginHandlerInterceptor;
-import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.io.File;
 
 /**
  * Created by XuJinghui on 2019/10/19.
@@ -30,4 +30,20 @@ public class MyMvcConfig implements WebMvcConfigurer {
         };
     }
 
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        File file=new File("");
+        String path=file.getAbsolutePath().substring(0,file.getAbsolutePath().lastIndexOf(File.separator));
+        //判断当前操作系统
+        String os = System.getProperty("os.name");
+        if (os.toLowerCase().startsWith("win")) {  //如果是Windows系统
+            //拦截匹配的请求，并将其要请求的资源路径解释为以下路径（项目所在目录+资源路径）
+            registry.addResourceHandler("/userPhoto/**","carousel/**").
+                    addResourceLocations("file:"+path+"/familyeduFile/images/userPhoto/","file:"+path+"/familyeduFile/images/carousel/");
+        }else{//linux和mac系统
+            registry.addResourceHandler("/userPhoto/**","carousel/**").
+                    addResourceLocations("file:"+path+"/familyeduFile/images/userPhoto/","file:"+path+"/familyeduFile/images/carousel/");
+        }
+
+    }
 }
