@@ -4,22 +4,20 @@ import com.xjh.fe.model.User;
 import com.xjh.fe.service.UserService;
 import com.xjh.fe.utils.CacheMap;
 import com.xjh.fe.utils.SendMessageUtil;
-import net.coobird.thumbnailator.Thumbnailator;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 @Controller
 public class UserController {
@@ -240,8 +238,10 @@ public class UserController {
     }
 
     /*获取文件存储真实路径*/
-    @Value("${web.upload-path}")
-    String fileStorePath;
+    /*@Value("${web.upload-path}")
+    String fileStorePath;*/
+    File file = new File("");
+    String fileStorePath = file.getAbsolutePath().substring(0,file.getAbsolutePath().lastIndexOf(File.separator)) + "/familyeduFile/images/";
 
     @RequestMapping("/uploadPhoto")
     @ResponseBody
