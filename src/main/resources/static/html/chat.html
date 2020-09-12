@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>青出于蓝家教网-在线聊天</title>
+    <!-- 图标 -->
+    <link rel="icon" href="../images/logo-min.ico" type="image/x-icon" />
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <script src="../js/common/jquery-3.4.1.min.js"></script>
+    <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <script src="../js/jquery.qqFace.js"></script>
+    <!--由于高版本的jq不支持$browser，但qqFace.js中又需要用，所以加了browser.js-->
+    <script src="../js/jquery-browser.js"></script>
+    <!--加密解密-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>-->
+    <script src="../../js/common/crypto-js.js"></script>
+    <!--聊天界面样式-->
+    <link rel="stylesheet" href="../css/chat.css">
+</head>
+<body>
+<div class="container-fluid phone-container">
+     <!--返回上一页面 -->
+    <div class="row pc-back" style="margin-top: 10px; margin-bottom: 5px;">
+        <div class="col-md-12">
+            <div class="container" style="padding: 0;">
+                <div class="col-md-12" style="padding-left: 0;">
+                    <button class="button-back" onclick="javascript:history.back(-1)">返回</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="phone-back"><img src="../images/back.png" onclick="javascript:history.back(-1)" /></div>
+        <div class="col-md-12">
+            <div class="container black-box-shadow" style="padding: 0;">
+                <div id="friendListContainer" class="col-md-3 div-list">
+                    <!--好友列表通过js插入处-->
+                </div>
+                <div id="initial-interface" class="col-md-9" style="background-color: #f5f5f5; padding: 0; height: 550px;text-align: center;line-height: 550px;font-size: 4.0rem; color: #c1bfbf;">
+                    青出于蓝在线聊天
+                </div>
+                <div id="final-interface" class="col-md-9" style="background-color: #f5f5f5; padding: 0; height: auto; display: none">
+                    <div class="col-md-12" style="height: 37.5px;border-bottom: 0.5px solid #dfdede; line-height: 37.5px; font-size: 1.5rem; font-weight: 600;padding: 0;">
+                        <!--好友名字-->
+                        <img id="returnToFriendList" src="../images/back.png" style="display: none;" onclick="backToFriendList()" /><p id="firendname" style="display: inline; padding-left: 5px;"></p>
+                        <input type="hidden" id="firendid"/>
+                        <img id="firendimg" class="img-list" style="display: none;"/>
+                    </div>
+                    <!-- 对话内容 -->
+                    <div class="col-md-12 phone-room" style="height: 362.5px;padding: 0;">
+                        <div id="content" class="room"></div></br>
+                    </div>
+                    <!-- 对话输入框 -->
+                    <div class="col-md-12" style="background-color: white;height: 150px; text-align: right;">
+                        <!--表情图标-->
+                        <div class="col-md-12 text-left emotion" style="padding: 5px 0 0 0"><img style="width: 24px;height: 24px" src="../images/emotion.png" /></div>
+                        <textarea name="" id="contentInp" class="textarea-style" placeholder="开始聊天···" maxlength="200" ></textarea>
+                        <button class="button-send" onclick="doSend();">发送(S)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    //Url处获取用户信息uid
+    var currentUrl = window.location.href;
+    var dataList = currentUrl.split("?");
+    var start = dataList[1].indexOf("=");
+    var aseKey = "12345678";
+    var uid = CryptoJS.AES.decrypt(dataList[1].substring(start+1), CryptoJS.enc.Utf8.parse(aseKey), {
+        mode: CryptoJS.mode.ECB,
+        padding: CryptoJS.pad.Pkcs7
+    }).toString(CryptoJS.enc.Utf8);
+    var uname;
+    var photo;
+    //从后台获取用户信息uname、photo
+    $.ajax({
+        type:"get",
+        url:"/personalInfo",
+        data:{uid:uid},
+        dataType:"json",
+        async: false,//如果不同步，会出现先执行ajax下面的
+        success:function (data) {
+            uname = data.uname;
+            photo = "../"+data.photo;
+        },
+        error:function () {
+            alert("获取数据异常");
+        }
+    })
+
+    $(document).ready(function () {
+        if (!window.WebSocket && !window.WebSocket.prototype.send){
+            alert("您的浏览器不支持websocket，推荐您使用谷歌浏览器、火狐浏览器！");
+        }
+    })
+    // WebSocket
+    var yhbh = uid;//用户编号
+    var xm = uname;//用户姓名
+    var ws = new WebSocket("ws://localhost:80/websocket/"+yhbh+"/"+xm);//与服务器创建连接 内网
+    //var ws = new WebSocket("ws://47.105.59.61/websocket/"+yhbh+"/"+xm);//外网
+
+    // ws连接
+    ws.onopen = function(){
+        console.log('连接成功！');
+    }
+
+    // 从服务端接收到消息，将消息回显到聊天记录区
+    ws.onmessage = function(evt){
+        var chatRecord = $.parseJSON(evt.data);
+        var sendTime = chatRecord.sendTime;
+        var sender = chatRecord.sender;
+        var receiver = chatRecord.receiver;
+        var receiverName = $("#firendname").html();
+        var msg = chatRecord.msg;
+        var myimg =  photo;
+        var firendimg = $('#firendimg')[0].src;
+        var friendid = $('#firendid').val();
+        if(sender==friendid || sender==uid){//如果当前聊天界面名字提示与消息接收id吻合则追加内容
+            if(sender == uid){
+                $("#content").append('<div class="msg-container msg-container-right" >'+ '<img class="img-style" style="float: right;" src="'+ myimg + ' "/>' + '<div class="msg-content msg-content-right">' + '<div class="msg-context-uname text-right">' + uname + '</div>' + '<div class="msg-context-info-right">' + replace_em(msg) +  '</div>' + '<div style="text-align: right;font-size: 0.6rem;clear: both;">' + getFormatDate(sendTime) + '</div>' + '</div>' + '</div>');
+            }
+            else {
+                $("#content").append('<div class="msg-container msg-container-left" >' + '<img class="img-style" style="float: left;" src="'+ firendimg +' "/>' + '<div class="msg-content msg-content-left">' + '<div class="msg-context-uname">' + receiverName + '</div>' + '<div class="msg-context-info-left">' + replace_em(msg) +  '</div>' + '<div style="text-align: left;font-size: 0.6rem;clear: both;">' + getFormatDate(sendTime) + '</div>' +  '</div>' +  '</div>');
+                updateIsRead(friendid,uid);
+            }
+            // 让滚动条滚动到最底
+            $('#content').scrollTop($('#content')[0].scrollHeight);
+        }
+        // 重新获取好友列表，让最新收发信息的好友在上面
+        initFriendList()
+        //查询各好友未读信息并显示
+        getUnReadNum()
+    }
+
+    ws.onerror = function(){
+        console.log('连接失败！');
+    }
+
+    ws.onclose = function(){
+        console.log('连接关闭！');
+        alert("连接关闭");
+    }
+
+    // 注销登录
+    function doClose(){
+        ws.close();
+    }
+    // 发送消息-私聊
+    function doSend(){
+        var receiver = $('#firendid').val();
+        var msg = $.trim($("#contentInp").val());
+        var msgCarrier = {id:null,sender:uid,receiver:receiver,msg:msg,sendTime:new Date(),senderStatus:1,receiverStatus:1};//消息载体{sender发送者，receiver接收者，msg消息内容}
+        if(msg == ''){
+            alert("请输入消息！");
+        }else{
+            ws.send(JSON.stringify(msgCarrier));
+            $("#contentInp").val("");
+        }
+    }
+    $("#contentInp").keypress(function(evt){
+        // if(evt.which == 13 || evt.which == 10){ //enter键发送消息
+        //     doSend();
+        // }
+        if(evt.ctrlKey && evt.which == 13 || evt.which == 10) {
+            doSend();
+        }
+    });
+
+    //清空消息
+    function doClear(){
+        $("#content").empty();
+    }
+
+    //初始化好友列表函数
+    function initFriendList() {
+        $.ajax({
+            type:"get",
+            url:"/getFriendList",
+            data:{uid:uid},
+            dataType:"json",
+            async: false,
+            success:function (friendList) {
+                $("#friendListContainer").html("");
+                for(var i=0;i<friendList.length;i++){
+                    var uid2 = friendList[i].uid;
+                    var uname = friendList[i].uname;
+                    var photo = "../"+friendList[i].photo;
+                    $("#friendListContainer").append('<div class="col-md-12 div-list-content" onclick="private_chat('+"'"+uid2+"'"+','+"'"+uname+"'"+','+"'"+photo+"'"+')"><img class="img-list" src="'+photo+'" /><span> '+uname+'</span>&nbsp;&nbsp;<span id="'+uid2+'" class="badge" style="background-color: red"></span></div>');
+                }
+            },
+            error:function () {
+                alert("获取好友列表异常");
+            }
+        });
+    }
+    // 加载页面时初始化好友列表
+    $(
+        initFriendList()
+    )
+
+    $(function () {
+        $(function(){
+            $('#friendListContainer').on('click','div',function(){
+                $(this).addClass('clickstyle');
+                $(this).siblings().removeClass('clickstyle');
+            })
+        })
+    })
+
+    // 时间格式：yyyy-MM-dd HH:mm:SS
+    function getFormatDate(time){
+        var nowDate = new Date(time);
+        var year = nowDate.getFullYear();
+        var month = nowDate.getMonth() + 1 < 10 ? "0" + (nowDate.getMonth() + 1) : nowDate.getMonth() + 1;
+        var date = nowDate.getDate() < 10 ? "0" + nowDate.getDate() : nowDate.getDate();
+        var hour = nowDate.getHours()< 10 ? "0" + nowDate.getHours() : nowDate.getHours();
+        var minute = nowDate.getMinutes()< 10 ? "0" + nowDate.getMinutes() : nowDate.getMinutes();
+        var second = nowDate.getSeconds()< 10 ? "0" + nowDate.getSeconds() : nowDate.getSeconds();
+        return year + "-" + month + "-" + date+" "+hour+":"+minute+":"+second;
+    }
+
+    function backToFriendList() {
+        $('#friendListContainer').css('display','block');
+        $('#final-interface').css('display','none');
+        $('.phone-back').css('display','block');
+        $('.phone-room').css('height','362.5px');
+    }
+
+    // 私聊
+    function private_chat(fid,fname,fimg) {
+        var windowWidth = $(window).width();
+        var windowHeight = $(window).height();
+        var roomHeight = windowHeight - 37.5 - 150;
+        if(windowWidth <= 768){//针对手机端
+            $('#friendListContainer').css('display','none');
+            $('.phone-back').css('display','none');
+            $('#returnToFriendList').css('display','inline');
+            $('.phone-room').css('height',roomHeight + 'px');
+        }
+        $('#initial-interface').css('display','none');
+        $('#final-interface').css('display','block');
+        // 清屏
+        doClear();
+        //$('#contentInp').focus();//让textarea获取焦点
+        //将与改好友的聊天改为已读
+        updateIsRead(fid,uid);
+        //去掉当前点击用户的徽章
+        $('#'+fid).html("");
+        // 替换好友名字
+        $('#firendname').html(fname);
+        //替换好友id
+        $('#firendid').val(fid);
+        //替换好友头像
+        $('#firendimg').attr('src',fimg);
+        // 向服务器发送请求，获取历史聊天记录
+        $.ajax({
+            type:"get",
+            url:"/getChatRecord",
+            data:{sender:uid,receiver:fid},//sender消息发送者id，receiver消息接收者id
+            dataType:"json",
+            success:function (chatRecordList) {
+                for(var i=0; i<chatRecordList.length; i++){
+                    if(chatRecordList[i].sender == uid){
+                        $("#content").append('<div class="msg-container msg-container-right" >'+ '<img class="img-style" style="float: right;" src="'+ photo + ' "/>' + '<div class="msg-content msg-content-right">' + '<div class="msg-context-uname text-right">' + uname + '</div>' + '<div class="msg-context-info-right">' + replace_em(chatRecordList[i].msg) +  '</div>' + '<div style="text-align: right;font-size: 0.6rem;clear: both;">' + getFormatDate(chatRecordList[i].sendTime) + '</div>' + '</div>' + '</div>');
+                    }
+                    else {
+                        $("#content").append('<div class="msg-container msg-container-left" >' + '<img class="img-style" style="float: left;" src="'+ fimg +' "/>' + '<div class="msg-content msg-content-left">' + '<div class="msg-context-uname">' + fname + '</div>' + '<div class="msg-context-info-left">' + replace_em(chatRecordList[i].msg) +  '</div>' + '<div style="text-align: left;font-size: 0.6rem;clear: both;">' + getFormatDate(chatRecordList[i].sendTime) + '</div>' +  '</div>' +  '</div>');
+                    }
+                }
+                // 让滚动条滚动到最底
+                $('#content').scrollTop($('#content')[0].scrollHeight);
+            },
+            error:function () {
+                console.log("获取聊天记录失败");
+            }
+        })
+        // 将获取到的信息放上屏，并让滚动条移到最底位置
+
+    }
+
+    //setInterval("getUnReadNum()", 1000);//每1000毫秒执行这个函数
+    $(function () {
+        getUnReadNum();//第一次进入聊天界面，获取未读聊天记录条数并显示
+    })
+    //获取未读聊天记录条数
+    function getUnReadNum() {
+        $.ajax({
+            type:"get",
+            url:"/getUnReadNum",
+            data:{receiver:uid},
+            dataType:"json",
+            success:function (data) {
+                for(var i = 0; i < data.length; i++){
+                    var sender = data[i].sender;
+                    var num = data[i].num;
+                    $("#"+sender).html(num+"");
+                }
+            }
+        })
+    }
+
+    /**
+     * 更新聊天表，将未读改为已读
+     * @param sender
+     * @param receiver
+     */
+    function updateIsRead(sender, receiver) {
+        $.ajax({
+            type:"get",
+            url:"/updateIsRead",
+            data:{sender:sender,receiver:receiver},
+            dataType:"text",
+            success:function (data) {
+
+            }
+        })
+    }
+
+    // 表情部分-开始
+    $(function(){
+
+        $('.emotion').qqFace({
+
+            id : 'facebox',
+
+            assign:'contentInp', //点击表情后，表情出现的位置
+
+            path:'../arclist/'	//表情存放的路径
+
+        });
+
+    });
+
+    //将信息msg中的表情换成表情图片gif
+
+    function replace_em(str){
+
+        // str = str.replace(/\</g,'&lt;');
+
+        // str = str.replace(/\>/g,'&gt;');
+
+        str = str.replace(/\n/g,'<br/>');
+
+        str = str.replace(/\[em_([0-9]*)\]/g,'<img src="../arclist/$1.gif" border="0" />');
+
+        return str;
+
+    }
+
+    // 窗口大小适应
+    $(document).ready(function(){
+        $(window).resize(function () {          //当浏览器大小变化时
+            var width = $(window).width();
+            var height = $(window).height();
+            if(width > 768){
+                $('#friendListContainer').css('display','block');
+                $('.phone-room').css('height','362.5px');
+                $('#returnToFriendList').css('display','none');
+                $('.phone-back').css('display','none');
+                var flag = $('#final-interface').css('display');
+                if(flag == 'none'){
+                    $('#initial-interface').css('display','block');
+                }
+                $('.div-list').css('height','550px');
+            }
+            if(width <= 768){
+                var roomHeight = height - 37.5 - 150;//手机端room高度由窗口高度决定
+                var friendListHeight = height - 43;
+                $('.phone-room').css('height',roomHeight + 'px');
+                $('.div-list').css('height',friendListHeight + 'px');
+            }
+        });
+    })
+
+    $(function () {
+        var width1 = $(window).width();
+        var height1 = $(window).height();
+        var friendListHeight = height1 - 43;
+        if(width1 > 768){
+            $('.div-list').css('height','550px');
+        }else {
+            $('.div-list').css('height',friendListHeight + 'px');
+        }
+    })
+</script>
+<!--用于解决手机端点一下返回键就退出的问题 让它返回上一页面-->
+<script src="../js/common/resolveAppBack.js"></script>
+</body>
+</html>

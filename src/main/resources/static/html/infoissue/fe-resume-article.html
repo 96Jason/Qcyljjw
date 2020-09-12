@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>青出于蓝家教网-个人简历</title>
+		<!-- 图标 -->
+		<link rel="icon" href="../../images/logo-min.ico" type="image/x-icon" />
+		<script src="../../js/common/require.js" data-main="../../js/infoissue/fe-resume-article" defer async="true"></script>
+		<style>
+			body{
+				background-color: rgb(82, 86, 89) !important;
+			}
+			.main-body{
+				background-color: white;
+				margin-top: 30px;
+				margin-bottom: 30px;
+				padding: 50px 30px 50px 30px;
+				-webkit-box-shadow: black 0px 0px 10px; 
+				   -moz-box-shadow: black 0px 0px 10px; 
+				   box-shadow: black 0px 0px 10px; 
+			}
+			th{
+				font-size: 16px;
+				border-bottom: 3px solid #8eb4e3 !important;
+				color: #7B68EE;
+			}
+			td{
+				font-size: 15px;
+				border: none !important;
+			}
+			.button{
+				outline: none !important;
+				color: white !important;
+				background-color: #9370DB;
+				font-weight: 600 !important;
+				
+			}
+			.button:hover{
+				color: red !important;
+			}
+			.color-filter:hover{
+				filter: url(#red);
+			}
+			@media screen and (max-width: 768px) {
+				td{
+					width: 100%;
+					display: block;
+				}
+				.main-body{
+					margin: 0px;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-2"></div>
+				<div class="col-md-8 main-body">
+					<div class="text-left" style="width: 50%; float: left;"><img onclick="javascript:history.back(-1)" src="../../images/back.png" /></div>
+					<div class="text-right" style="width: 50%; float:right;"><button id="interested" class="btn button"><i class="color-filter"><img src="../../images/interested.png" alt="图标" />邀应聘</i></button></div>
+					<div id="_interested" style="display: none;" data-toggle="modal" data-target="#select-recruit" ></div>
+					<!-- 个人信息 1 -->
+					<div>
+						<div style="width: 88%; float: left;">
+							<table id="userInfoTable" class="table">
+								<thead><tr><th>个人信息</th><th></th><th></th></tr></thead>
+								<tbody>
+									<tr>
+										<td><b>姓名：</b>加载中……</td>
+										<td><b>职业：</b>加载中……</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td><b>性别：</b>加载中……</td>
+										<td><b>手机：</b>加载中……</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td><b>年龄：</b>加载中……</td>
+										<td><b>邮箱：</b>加载中……</td>
+										<td></td>
+									</tr>
+								</tbody>							
+							</table>
+						</div>
+						<div style="width: 12%; float: left;">
+							<img id="user-photo" style="position: absolute; right: 30px; top: 122px;" width="86px" height="120px" />
+						</div>						
+					</div>
+					<!-- 教学范围 2 -->
+					<div>						
+						<table id="teachRangeTable" class="table">
+							<thead><tr><th>教学范围</th><th></th><th></th></tr></thead>
+							<tbody>
+								<tr>
+									<td><b>教学科目：</b>加载中……</td>
+									<td><b>教学模式：</b>加载中……</td>
+									<td><b>授课地区：</b>加载中……</td>
+								</tr>
+							</tbody>							
+						</table>
+					</div>
+					<!-- 教育背景 3 -->
+					<div>
+						<table id="educationTable" class="table">
+							<thead><tr><th>教育背景</th><th></th><th></th></tr></thead>
+							<tbody>
+								<tr>
+									<td><b>在读/毕业院校：</b>加载中……</td>
+									<td><b>学历：</b>加载中……</td>
+								</tr>
+							</tbody>							
+						</table>
+					</div>
+					<!-- 座右铭 4 -->
+					<div>						
+						<table id="mottoTable" class="table">
+							<thead><tr><th>座右铭</th><th></th><th></th></tr></thead>
+							<tbody>
+								<tr>
+									<td><p style="text-align: justify;">加载中……</p></td>
+								</tr>
+							</tbody>							
+						</table>
+					</div>
+					<!-- 自我评价 5 -->
+					<div>
+						<table id="introTable" class="table">
+							<thead><tr><th>自我评价</th><th></th><th></th></tr></thead>
+							<tbody>
+								<tr>
+									<td>
+										<p style="text-align: justify;">加载中……
+										</p>
+									</td>
+								</tr>
+							</tbody>							
+						</table>
+					</div>
+				</div>
+				<div class="col-md-2"></div>
+			</div>
+		</div>
+
+		<!--招聘信息选择模态框-->
+		<div class="modal" id="select-recruit">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4>请选择招聘信息</h4>
+					</div>
+					<form id="recruitForm" role="form" class="form-horizontal">
+						<div class="modal-body">
+							<div class="form-group">
+								<div class="col-md-12">
+									<select id="recruit" name="recruit" style="width: 100%; height: 40px;" autocomplete="off"></select>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button id="cancel" type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+							<button type="submit" class="btn btn-default">确定</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<svg height="0" xmlns="http://www.w3.org/2000/svg">
+		    <defs>
+		        <filter id="red">
+		               <feColorMatrix values="
+								0 0 0 0 255
+		                        0 0 0 0 0
+		                        0 0 0 0 0
+		                        0 0 0 1 0" />
+		        </filter>
+		    </defs>
+		</svg>
+	</body>
+</html>

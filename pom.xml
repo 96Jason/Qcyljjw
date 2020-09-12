@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<!--spring-boot-starter-parent是所有Spring Boot依赖包的父依赖，它提供了很多有用的默认设置，如application.properties的位置等。
+	其它依赖包只是提供了开发特定类型应用的功能，如spring-boot-starter-web包含了Tomcat、SpringMVC等内容。Spring-boot-starter-test
+	是一个通用的测试模块，该模块中包含Junit、Hamcrest等测试框架。-->
+	<!--项目基本信息-->
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.xjh</groupId>
+	<artifactId>familyeducation</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<name>familyeducation</name>
+	<description>Demo project for Spring Boot</description>
+	<!--父依赖-->
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.8.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<!--编码和Java版本-->
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+	</properties>
+	<!--其它依赖-->
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!--MyBatis启动器-->
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<!--MySql驱动-->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.11</version>
+		</dependency>
+		<!-- springboot websocket -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+		<!--jackson-->
+		<!--json-lib适用于JDK1.5，当使用高版本jdk时可能会报错，不建议使用。-->
+		<!--json-lib时间有些久远，jar包只更新到2010年-->
+		<!--org.json用起来有些繁琐-->
+		<!--Jackson、Gson、FastJson只需一两句话就可以搞定-->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.9.0</version>
+		</dependency>
+		<!-- fastjson -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.48</version>
+		</dependency>
+		<!--腾讯云短信服务-->
+		<dependency>
+			<groupId>com.github.qcloudsms</groupId>
+			<artifactId>qcloudsms</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+		<!--设置图片尺寸-->
+		<dependency>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+			<version>0.4.8</version>
+		</dependency>
+	</dependencies>
+</project>

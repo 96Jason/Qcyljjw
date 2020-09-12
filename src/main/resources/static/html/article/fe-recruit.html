@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>青出于蓝家教网-个人简历</title>
+		<!-- 图标 -->
+		<link rel="icon" href="../../images/logo-min.ico" type="image/x-icon" />
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+		<script src="../../js/common/jquery-3.4.1.min.js"></script>
+		<script src="../../bootstrap/js/bootstrap.min.js"></script>
+		<style>
+			body{
+				background-color: rgb(82, 86, 89);
+			}
+			.main-body{
+				background-color: white;
+				margin-top: 30px;
+				margin-bottom: 30px;
+				padding: 50px 30px 50px 30px;
+				-webkit-box-shadow: black 0px 0px 10px; 
+				   -moz-box-shadow: black 0px 0px 10px; 
+				   box-shadow: black 0px 0px 10px; 
+			}
+			th{
+				font-size: 16px;
+				border-bottom: 3px solid #8eb4e3 !important;
+				color: #7B68EE;
+			}
+			td{
+				font-size: 15px;
+				border: none !important;
+			}
+			button{
+				outline: none !important;
+				color: white !important;
+				background-color: #9370DB;
+				font-weight: 600 !important;
+				
+			}
+			button:hover{
+				color: red !important;
+			}
+			@media screen and (max-width: 768px) {
+				td{
+					width: 100%;
+					display: block;
+				}
+				.main-body{
+					margin: 0;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-2"></div>
+				<div class="col-md-8 main-body">
+					<!-- 聘方信息 1 -->
+					<div>
+						<div style="width: 88%; float: left;">
+							<table id="recruitTable" class="table">
+								<thead><tr><th>聘方信息</th><th></th><th></th></tr></thead>
+								<tbody>
+								<tr>
+									<td><b>姓名：</b>加载中……</td>
+									<td><b>手机：</b>加载中……</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td><b>单位：</b>加载中……</td>
+									<td><b>邮箱：</b>加载中……</td>
+									<td></td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+						<div style="width: 12%; float: left;">
+							<img id="user-photo" style="position: absolute; right: 30px; top: 88px;" width="86px" height="120px" />
+						</div>
+					</div>
+					<!-- 教学范围 2 -->
+					<div>
+						<table id="teachRangeTable" class="table">
+							<thead><tr><th>教学范围</th><th></th><th></th></tr></thead>
+							<tbody>
+							<tr>
+								<td><b>教学科目：</b>加载中……</td>
+								<td><b>教学模式：</b>加载中……</td>
+								<td><b>授课地点：</b>加载中……</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- 学员简介 3 -->
+					<div>
+						<table id="studentTable" class="table">
+							<thead><tr><th>学员简介</th><th></th><th></th></tr></thead>
+							<tbody>
+							<tr>
+								<td><p style="text-align: justify;">加载中……</p></td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+					<!-- 教学要求 4 -->
+					<div>
+						<table id="requireTable" class="table">
+							<thead><tr><th>教学要求</th><th></th><th></th></tr></thead>
+							<tbody>
+							<tr>
+								<td>
+									<p style="text-align: justify;">加载中……
+									</p>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="col-md-2"></div>
+			</div>
+		</div>
+		
+		<svg height="0" xmlns="http://www.w3.org/2000/svg">
+		    <defs>
+		        <filter id="red">
+		               <feColorMatrix values="
+								0 0 0 0 255
+		                        0 0 0 0 0
+		                        0 0 0 0 0
+		                        0 0 0 1 0" />
+		        </filter>
+		    </defs>
+		</svg>
+		<!--从url中获取数据-->
+	<script>
+        //获取url中的数据
+        function getDataList() {
+            var currentUrl = window.location.href;
+            //url与数据部分分段
+            var urlAndDataSubsection = currentUrl.split("=");
+            //获取数据部分并返回
+            return urlAndDataSubsection[1];
+        }
+	</script>
+	<!--渲染简历信息-->
+	<script>
+        $(function () {
+            var id = getDataList();
+            $.ajax({
+                type:"get",
+                url:"/getSendRecruitById",
+                data:{"id":id},
+                dataType:"json",
+                success:function (recruit) {
+                    // 头像
+					$("#user-photo").attr("src","../../"+recruit.photo);
+                    // 聘方信息
+                    var recruitTable = $("#recruitTable");
+                    var recruitTbody = recruitTable.children("tbody").eq(0);
+                    var recruitTrArray = recruitTbody.children("tr");
+                    var recruitTdArray1 = recruitTrArray.eq(0).children("td");
+                    recruitTdArray1.eq(0).html("<b>姓名</b>："+recruit.uname);
+                    recruitTdArray1.eq(1).html("<b>手机</b>："+recruit.phone);
+                    var recruitTdArray2 = recruitTrArray.eq(1).children("td");
+                    recruitTdArray2.eq(0).html("<b>单位</b>："+recruit.unit);
+                    recruitTdArray2.eq(1).html("<b>邮箱</b>："+recruit.email);
+                    //教学范围
+					var teachRangeTable = $("#teachRangeTable");
+                    var teachRangeTbody = teachRangeTable.children("tbody").eq(0);
+                    var teachRangeTrArray = teachRangeTbody.children("tr");
+                    var teachRangeTdArray1 = teachRangeTrArray.eq(0).children("td");
+                    teachRangeTdArray1.eq(0).html("<b>教学科目</b>："+recruit.subject);
+                    teachRangeTdArray1.eq(1).html("<b>教学模式</b>："+recruit.pattern);
+                    teachRangeTdArray1.eq(2).html("<b>授课地点</b>："+recruit.address);
+                    //学员简介
+                    var studentTable = $("#studentTable");
+                    var studentTbody = studentTable.children("tbody").eq(0);
+                    var studentTrArray = studentTbody.children("tr");
+                    var studentTdArray1 = studentTrArray.eq(0).children("td");
+                    studentTdArray1.eq(0).children("p").eq(0).html(recruit.stu_intro);
+                    //教学要求
+                    var requireTable = $("#requireTable");
+                    var requireTbody = requireTable.children("tbody").eq(0);
+                    var requireTrArray = requireTbody.children("tr");
+                    var requireTdArray1 = requireTrArray.eq(0).children("td");
+                    requireTdArray1.eq(0).children("p").eq(0).html(recruit.work_require);
+                },
+                error:function () {
+                    alert("请求失败");
+                }
+            })
+        })
+	</script>
+	</body>
+</html>

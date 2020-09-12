@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>青出于蓝家教网-后台管理系统</title>
+		<!-- 图标 -->
+        <link rel="icon" href="../../images/logo-min.ico" type="image/x-icon" />
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+        <script src="../../js/common/jquery-3.4.1.min.js"></script>
+        <script src="../../bootstrap/js/bootstrap.min.js"></script>
+		<style>
+            body{
+                overflow: hidden;
+            }
+			.left-nav{
+				background-color: #ffffff;
+				box-shadow: -2px 0px 0px #e5e5e5 inset;
+			}
+			ul{
+				list-style: none;
+				padding: 0;
+			}
+			ul li{
+				display: inline-block;
+				width: 100%;
+			}
+			ul li a{
+				display: block;
+				color: gray;
+				height: 40px;
+				padding-left: 20px;
+				line-height: 40px;
+				text-decoration: none;
+				font-size: 1.5rem;
+			}
+			ul li:hover > a{
+				color: #ffffff;
+				background-color: #796aee;
+				text-decoration: none;
+			}
+			a:link,a:active,a:visited,a:hover{
+			    text-decoration: none;
+			}
+			.clickstyle{
+				background-color: #796aee;
+			}
+			.clickstyle a{
+				color: #ffffff;
+			}
+			.padding-0{
+				padding: 0;
+			}
+			.header-title-container{
+				background-color: #2f333e;
+				text-align: center;
+				height: 45px;
+				line-height: 45px;
+				color: #ffffff;
+			}
+			.headertitle-font-size{				
+				font-size: 1.6rem;				
+			}
+			.sayHello-font-size{
+				font-size: 1.3rem;
+			}
+			.sayHello-font-size a{
+				text-decoration: none;
+				color: #ffffff;
+			}
+			.sayHello-font-size a:hover{
+				color: red;
+			}
+			.iframe-style{
+				width: 100%;
+				border: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container-fluid">
+			<div class="row header-title-container">
+				<div class="col-md-2"></div>
+				<div class="col-md-8 headertitle-font-size">青出于蓝家教网-后台管理系统</div>
+				<div class="col-md-2 sayHello-font-size"><span id="greet"></span><span id="uid" style="display: none;"></span><span id="uname"></span>&nbsp;/&nbsp;<a href="/logout">退出</a></div>
+			</div>
+			<div class="row">
+				<div class="col-md-2 left-nav padding-0">
+					<ul id="ul1">
+						<li><a href="user-info.html" target="iframe1">用户管理</a></li>
+						<li><a href="advertising.html" target="iframe1">轮播管理</a></li>
+					</ul>
+				</div>
+				<div class="col-md-10" style="height: 550px;background-color: #eef5f9;padding: 0;">
+					<div class="col-md-12" style="padding: 0;">
+						<iframe name="iframe1" class="iframe-style" src=""></iframe>
+					</div>			
+				</div>
+			</div>
+		</div>
+		<script>
+			var uid = window.localStorage.getItem("uid");
+			var uname = window.localStorage.getItem("uname");
+			$("#uid").text(uid);
+			$("#uname").text(uname);
+			$(function () {
+			        $(function(){
+			            $('#ul1').on('click','li',function(){
+			                $(this).addClass('clickstyle');
+			                $(this).siblings().removeClass('clickstyle');
+			            })
+			        })
+			})
+			// 0-5:59凌晨、6-11:59上午、12-18:59下午、18-23:59晚上
+			$(function () {
+			    var greetings = "";
+				var currentTime = new Date();
+				var hours = currentTime.getHours();
+				if(hours >= 0 && hours < 6){
+				    greetings = "凌晨好！";
+				}else if(hours >= 6 && hours < 12){
+				    greetings = "上午好！";
+				}else if(hours >= 12 && hours < 18){
+				    greetings = "下午好！";
+				}else {
+				    greetings = "晚上好！";
+				}
+				$("#greet").html(greetings);
+            })
+
+			function getUid() {
+			    var uid = $("#uid").html();
+				return uid;
+            }
+            $(function () {
+                let height = $(window).height();
+                $(".left-nav").css("height",height - 45 + "px");
+                $(".iframe-style").css("height",height - 45 + "px");
+            })
+		</script>
+	</body>
+</html>

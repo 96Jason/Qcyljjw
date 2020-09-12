@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--地址选择-->
+	<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+	<meta content="yes" name="apple-mobile-web-app-capable"/>
+	<meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+	<meta content="telephone=no" name="format-detection"/>
+	<link rel="stylesheet" href="../../address/css/ydui.css?rev=@@hash"/>
+	<script src="../../address/js/ydui.flexible.js"></script>
+	<title>青出于蓝家教网-简历发布</title>
+	<!-- 图标 -->
+	<link rel="icon" href="../../images/logo-min.ico" type="image/x-icon" />
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+	<script src="../../js/common/jquery-3.4.1.min.js"></script>
+	<script src="../../bootstrap/js/bootstrap.min.js"></script>
+	<!--加密解密-->
+	<script src="../../js/common/crypto-js.js"></script>
+	<style>
+		.fe-textarea-1{
+			overflow:hidden;
+			border:0;
+			width: 100%;
+			resize: none;
+			outline: none;				
+		}
+		.fe-textarea-1-height-1{
+			height: 195px;
+		}
+		.fe-textarea-1-height-2{
+			height: 50px;
+		}
+		.num{
+			text-align: right;
+			color: #555;
+		}
+		.fe-div-1{
+			border:1px solid #ccc;
+			border-radius:4px;
+		}
+		.fe-div-1-height-1{
+			height: 225px;
+		}
+		.fe-div-1-height-2{
+			height: 80px;
+		}
+		.fe-div-2{
+			margin-top: 10px;
+			margin-bottom: 10px;
+		}
+	</style>
+	<!--提示框-->
+	<style>
+		.tip-box{
+			display: none;
+			position: fixed;
+			width: 200px;
+			height: 100px;
+			background-color: white;
+			border-radius: 10px;
+			padding: 10px;
+			text-align: center;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%,-50%);
+		}
+		.mask{
+			top: 0;
+			left: 0;
+			display: none;
+			position: absolute;
+			background-color: rgba(0, 0, 0, 0.5);
+		}
+		.button-style-1{
+			border: 0;
+			border-radius: 5px;
+			outline: none;
+			color: white;
+			margin-top: 6px;
+			width: 60px;
+			height: 30px;
+			line-height: 30px;
+			background-color: #66cc33;
+		}
+		.tip-div-style-1{
+			height: 50px;
+			line-height: 50px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<form role="form" id="form1" action="">
+					<div class="col-md-12 fe-div-2">
+						<div class="col-md-12">
+							<button type="button" class="btn btn-default" onclick="javascript:history.back();">上一页</button>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="school">院校</label>
+								<input type="text" class="form-control" id="school" name="school" maxlength="30" disabled required>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="degree">学历</label>
+								<input type="text" class="form-control" id="degree" name="degree" disabled maxlength="10" required>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="subject">教学科目<span style="color: red;">*</span></label>
+								<input type="text" class="form-control" id="subject" name="subject" placeholder="请选择科目" maxlength="8" required>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="pattern">教学模式<span style="color: red;">*</span></label>
+								<input type="text" class="form-control" id="pattern" name="pattern" placeholder="请选择教学模式" maxlength="6" required>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="profession">职位</label>
+								<input type="text" class="form-control" id="profession" name="profession" disabled maxlength="30" required>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="salary">期望薪资<span style="color: red;">*</span></label>
+								<input type="text" class="form-control" id="salary" name="salary" placeholder="请填写期望薪资" onkeyup="value=value.replace(/[^\d]+/g,'')" autocomplete="off" maxlength="18" required>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="motto">座右铭<span style="color: red;">*</span></label>
+								<div class="fe-div-1 fe-div-1-height-2">
+									<div class="col-sm-12" style="padding: 5px 10px 0px 10px">
+										<textarea id="motto" class="fe-textarea-1 fe-textarea-1-height-2" placeholder="请填写座右铭" required name="motto" type="text" maxlength="50" onkeyup="javascript:setShowLength(this, 50, 'num2');"></textarea>
+									</div>
+									<div class="col-sm-12 num"><p id="num2">0/50</p></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="city">教学地区<span style="color: red;">*</span></label>
+								<input type="text" class="form-control" id="city" name="address" placeholder="请选择地区" autocomplete="off" maxlength="50" readonly required>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="intro">自我评价<span style="color: red;">*</span></label>
+								<div class="fe-div-1 fe-div-1-height-1">
+									<div class="col-sm-12" style="padding: 5px 10px 0px 10px">
+										<textarea id="intro" class="fe-textarea-1 fe-textarea-1-height-1" placeholder="请填写自我评价" required name="intro" type="text" maxlength="300" onkeyup="javascript:setShowLength(this, 300, 'num1');"></textarea>
+									</div>
+									<div class="col-sm-12 num"><p id="num1">0/300</p></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12 text-right">
+						<div class="col-md-12">
+							<button type="button" class="btn btn-default" onclick="javascript :history.go(-1);">取消</button>
+							<button type="submit" class="btn btn-default">发布</button>
+						</div>
+					</div>					
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<!--弹出框-->
+	<div class="mask"></div>
+	<div class="tip-box">
+		<div id="title" class="tip-div-style-1"></div>
+		<button class="button-style-1" onclick="closeBox()">OK</button>
+	</div>
+</body>
+
+<script>
+	<!-- 文本字数 -->
+	function setShowLength(obj, maxlength, id) {
+		var rem = obj.value.length; 
+		var wid = id; 
+		if (rem < 0){ 
+			rem = 0; 
+		} 
+		document.getElementById(wid).innerHTML = rem + "/" + maxlength; 
+	}
+</script>
+
+<script type="text/javascript">
+    function getUid() {
+        //页面跳转部分
+        var currentUrl = window.location.href;
+        var dataList = currentUrl.split("?");
+        var start = dataList[1].indexOf("=");
+        // var uid = dataList[1].substring(start+1);
+        //解密
+        var aseKey = "12345678";
+        var uid = CryptoJS.AES.decrypt(dataList[1].substring(start+1), CryptoJS.enc.Utf8.parse(aseKey), {
+            mode: CryptoJS.mode.ECB,
+            padding: CryptoJS.pad.Pkcs7
+        }).toString(CryptoJS.enc.Utf8);
+        return uid;
+    }
+
+    $(function () {
+        $.ajax({
+            type:"get",
+            url:"/personalInfo",
+            data:{uid:getUid()},
+            dataType:"json",
+			success(user){
+                if(user.isIdentify == 1){
+                    $("#school").val(nullTransferEmptyString(user.school));
+                    $("#degree").val(nullTransferEmptyString(user.degree));
+                }
+                $("#profession").val(nullTransferEmptyString(user.profession));
+            }
+        });
+    })
+
+    // null值转变空串
+    function nullTransferEmptyString(str) {
+        if(str == null){
+            return "";
+        }
+        return str;
+    }
+
+    // 提交表单
+        $('#form1').on('submit',function(e) {
+            e.preventDefault();
+            var form = new FormData(document.getElementById("form1"));
+            form.append("status",1);
+            var uid = getUid();
+            form.append("user_id",uid);
+            $.ajax({
+                type: "post",
+                url: "/insertIntroSend",
+                data: form,
+                dataType: 'text',
+                processData:false,
+                contentType:false,
+                success: function (data) {
+                    if (data == "success") {
+                        popupBox("发布成功");
+                    } else if (data == "userInfoNotComplete"){
+                        popupBox("请先完善个人资料");
+                    } else if (data == "existResumeIssue"){
+                        popupBox("已有简历在发布");
+					} else if (data == "error"){
+                        popupBox("发布失败");
+					}
+                    $('#form1')[0].reset();//重置表单
+                },
+                error:function () {
+                    popupBox("请求失败");
+                }
+            });
+        })
+
+    //弹出框
+    function popupBox(data) {
+        $('.mask').css('display', 'block');
+        $('.mask').css('width', $(window).width())
+        $('.mask').css('height', $(document).height())
+        $('#title').html(data);
+        $('.tip-box').slideToggle();
+    }
+    // 关闭弹出框
+    function closeBox() {
+        $('.tip-box').slideToggle();
+        $('.mask').css('display', 'none');
+        window.location.reload();
+    }
+</script>
+<!--地址选择-->
+<script src="../../address/js/ydui.citys.js"></script>
+<script src="../../address/js/ydui.js"></script>
+<script>
+    /**
+     * 默认调用
+     */
+    !function () {
+        var $target = $('#city');
+
+        $target.citySelect();
+
+        $target.on('click', function (event) {
+            event.stopPropagation();
+            $target.citySelect('open');
+        });
+
+        $target.on('done.ydui.cityselect', function (ret) {
+            $(this).val(ret.provance + ' ' + ret.city + ' ' + ret.area);
+        });
+    }();
+</script>
+<!--用于解决手机端点一下返回键就退出的问题 让它返回上一页面-->
+<script src="../../js/common/resolveAppBack.js"></script>
+</html>

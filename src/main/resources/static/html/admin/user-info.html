@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+		<script src="../../js/common/jquery-3.4.1.min.js"></script>
+		<script src="../../bootstrap/js/bootstrap.min.js"></script>
+		<style>
+			.input-search{
+				margin: 0;
+				padding: 0;
+				height: 20px;
+				width: 85%;
+				outline: none;
+				border: none;
+				box-shadow:0 0 0 20px #ffffff inset;
+				border-radius: 15px;
+				padding-left: 30px;
+				color: black;
+			}
+			th,td{
+                text-align: center;
+                vertical-align: middle!important;
+                font-size: 1.5rem;
+                font-weight: 600;
+			}		
+			td a{
+				color: #000000;
+				font-size: 1.2rem;
+				font-weight: 600;
+			}
+			a:link,a:visited,a:active,a:hover{
+				text-decoration: none;
+			}
+			.table-striped tbody tr:nth-child(even) td,			
+			.table-striped tbody tr:nth-child(even) th {background-color:#D4FFFF;}
+			
+			.table-striped tbody tr:nth-child(odd) td,
+			.table-striped tbody tr:nth-child(odd) th {background-color:#D4BFFF;}
+			.div-button-style{
+				border: 0;
+				outline: none;
+				width: auto;
+				height: auto;
+				padding: 3px;
+				-webkit-border-radius: 25%;
+				-moz-border-radius: 25%;
+				border-radius: 25%;
+				color: #FFFFFF;
+			}
+			.div-button-backcolor-1{
+				background-color: #54e69d;
+			}
+			.div-button-backcolor-1:hover{
+				background-color: red;
+				color: #ffffff;
+			}
+			.div-button-backcolor-2{
+				background-color: red;
+			}
+			.div-button-backcolor-2:hover{
+				background-color: #54e69d;
+				color: #ffffff;
+			}
+            img{
+                width: 100px;
+                height: 150px;
+            }
+		</style>
+	</head>
+	<body>
+		<div class="container-fluid">
+			<div class="row" style="position: fixed;z-index:9999;width: 100%;padding: 0; height: 40px;background-color: #54e69d;line-height: 40px;color: #ffffff;">
+				<!--显示用户总量-->
+				<div class="col-md-4" id="Sum"></div>
+				<!--显示封禁数量-->
+				<div class="col-md-4" id="ban"></div>
+				<div class="col-md-4" style="padding: 5px;">
+					<div style="width: 100%;height: 100%;background-color: white;line-height: 30px;border-radius: 15px;">
+						<input id="select-user" class="input-search" name="uname" type="text" autocomplete="off" maxlength="10" placeholder="开始搜索···" onchange="selectUser()" />
+						<img src="../../images/search.png" style="width: 30px;height: 30px;" onclick="selectUser()" />
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin-top: 40px;">
+				<div class="col-md-12" style="padding: 0;">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>编号</th>
+                                <th>用户类型</th>
+								<th>姓名</th>
+                                <th>头像</th>
+                                <th>证件</th>
+                                <th>证件状态</th>
+                                <th>院校</th>
+                                <th>学历</th>
+								<th>手机</th>
+                                <th>审批</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<!--通过jq插入用户列表-->
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	<script>
+		// 全局变量
+		var userData = null;
+		//初始化用户列表-一打开页面就执行
+		$(function () {
+			$.ajax({
+				type:"get",
+				url:"/userList",
+				dataType:"json",
+				success:function (userList) {
+				    userData = userList;
+				    var ban = 0;
+				    $("#Sum").html("总量:"+userList.length);
+					for(var i=0; i<userList.length; i++){
+					    var uid = userList[i].uid;
+					    var img = "";
+					    var power = "";
+					    var isIdentify = "";
+					    if(userList[i].power == 1){
+                            if(userList[i].studentCard != null){
+                                img = "<img class='img-rounded' alt='证件照' src='../../"+filterNull(userList[i].studentCard)+"'>";
+                            } else {
+                                img = "<img class='img-rounded' alt='证件照' src='../../userPhoto/zwzjz.png'>";
+                            }
+                            switch (userList[i].isIdentify){
+                                case 1:
+                                    isIdentify = "通过";
+                                    break;
+                                case 2:
+                                    isIdentify = "未通过";
+                                    break;
+                                case 0:
+                                    if(userList[i].studentCard == null){
+                                        isIdentify = "";
+                                    }else {
+                                        isIdentify = "待审核";
+                                    }
+                                    break;
+                            }
+                        }
+                        switch (userList[i].power){
+                            case 1:
+                                power = "学生";
+                                break;
+                            case 2:
+                                power = "家长";
+                                break;
+                            case 3:
+                                power = "管理员";
+                                break;
+                        }
+                        var user = "\t\t\t\t\t\t\t\t<td>"+filterNull(userList[i].uid)+"</td>\n" +
+                            "\t\t\t\t\t\t\t\t<td>"+power+"</td>\n" +
+                            "\t\t\t\t\t\t\t\t<td>"+filterNull(userList[i].uname)+"</td>\n" +
+                            "\t\t\t\t\t\t\t\t<td><img class='img-rounded' alt='用户头像' src='../../"+filterNull(userList[i].photo)+"'></td>\n" +
+                            "\t\t\t\t\t\t\t\t<td>"+img+"</td>\n" +
+                            "\t\t\t\t\t\t\t\t<td>"+isIdentify+"</td>\n" +
+                            "\t\t\t\t\t\t\t\t<td>"+filterNull(userList[i].school)+"</td>\n" +
+                            "\t\t\t\t\t\t\t\t<td>"+filterNull(userList[i].degree)+"</td>\n" +
+                            "\t\t\t\t\t\t\t\t<td>"+filterNull(userList[i].phone)+"</td>\n";
+					    if(userList[i].power==3){
+					        if(userList[i].status==0){
+					            ban++;
+							}
+                            $("tbody").append("<tr>\n" + user +
+                                "\t\t\t\t\t\t\t\t<td></td>\n" +
+                                "\t\t\t\t\t\t\t\t<td></td>\n" +
+                                "\t\t\t\t\t\t\t</tr>")
+						}else {
+					        if(userList[i].studentCard != null){
+                                if(userList[i].status==0){
+                                    ban++;
+                                    $("tbody").append("<tr>\n" + user +
+                                        "\t\t\t\t\t\t\t\t<td><button type='button' class='div-button-style div-button-backcolor-1' onclick='upIsIdentify(this,"+'"'+userList[i].uid+'"'+",1)'>通过</button>&nbsp;<button type='button' class='div-button-style div-button-backcolor-2' onclick='upIsIdentify(this,"+'"'+userList[i].uid+'"'+",2)'>不通过</button></td>\n" +
+                                        "\t\t\t\t\t\t\t\t<td><button type='button' class='div-button-style div-button-backcolor-2' onclick='permission(this,"+'"'+uid+'"'+")'>解封</button></td>\n" +
+                                        "\t\t\t\t\t\t\t</tr>"
+                                    );
+                                }else {
+                                    $("tbody").append("<tr>\n" + user +
+                                        "\t\t\t\t\t\t\t\t<td><button type='button' class='div-button-style div-button-backcolor-1' onclick='upIsIdentify(this,"+'"'+userList[i].uid+'"'+",1)')'>通过</button>&nbsp;<button type='button' class='div-button-style div-button-backcolor-2' onclick='upIsIdentify(this,"+'"'+userList[i].uid+'"'+",2)'>不通过</button></td>\n" +
+                                        "\t\t\t\t\t\t\t\t<td><button type='button' class='div-button-style div-button-backcolor-1' onclick='prohibition(this,"+'"'+uid+'"'+")'>封禁</button></td>\n" +
+                                        "\t\t\t\t\t\t\t</tr>"
+                                    );
+                                }
+                            }else{
+                                if(userList[i].status==0){
+                                    ban++;
+                                    $("tbody").append("<tr>\n" + user +
+                                        "\t\t\t\t\t\t\t\t<td></td>\n" +
+                                        "\t\t\t\t\t\t\t\t<td><button type='button' class='div-button-style div-button-backcolor-2' onclick='permission(this,"+'"'+uid+'"'+")'>解封</button></td>\n" +
+                                        "\t\t\t\t\t\t\t</tr>"
+                                    );
+                                }else {
+                                    $("tbody").append("<tr>\n" + user +
+                                        "\t\t\t\t\t\t\t\t<td></td>\n" +
+                                        "\t\t\t\t\t\t\t\t<td><button type='button' class='div-button-style div-button-backcolor-1' onclick='prohibition(this,"+'"'+uid+'"'+")'>封禁</button></td>\n" +
+                                        "\t\t\t\t\t\t\t</tr>"
+                                    );
+                                }
+                            }
+						}
+					}
+					$("#ban").html("封禁:"+ban);
+                },
+				error:function () {
+					alert("初始化用户列表失败，请重试");
+                }
+			})
+        })
+		function permission(obj,uid) {
+			$.ajax({
+				type:"get",
+				url:"/permission",
+				data:{uid:uid,status:1},
+				dataType:"text",
+				success:function (data) {
+				    if(data == "success"){
+                        $(obj).css('background-color','#54e69d');
+                        $(obj).html("封禁");
+                        $(obj).removeAttr("onclick");
+                        $(obj).attr("onclick","prohibition(this,'"+uid+"')");
+                        var banCount = $("#ban").html();
+                        $("#ban").html("封禁:"+(parseInt(banCount.substring(3))-1));
+					}
+                },
+				error:function () {
+					alert("系统出错");
+                }
+			})
+        }
+        function prohibition(obj,uid) {
+            $.ajax({
+                type:"get",
+                url:"/prohibition",
+                data:{uid:uid,status:0},
+                dataType:"text",
+                success:function (data) {
+                    if(data == "success"){
+                        $(obj).css('background-color','red');
+                        $(obj).html("解封");
+                        $(obj).removeAttr("onclick");
+                        $(obj).attr("onclick","permission(this,'"+uid+"')");
+                        var banCount = $("#ban").html();
+                        $("#ban").html("封禁:"+(parseInt(banCount.substring(3))+1));
+					}
+                },
+                error:function () {
+                    alert("系统出错");
+                }
+            })
+        }
+        // 界面查询用户所用方法
+        function selectUser() {
+		    let banNum = 0;
+		    let userNum = 0;
+			let text = $("#select-user").val();
+			$("tbody").html("");
+            let userList = [];
+			for(let i = 0; i < userData.length; i++){
+			    let uid = userData[i].uid;
+			    let uname = userData[i].uname;
+			    let phone = userData[i].phone;
+			    let school = userData[i].school + "";
+			    let degree = userData[i].degree + "";
+			    let userType = (userData[i].power == 1)? "学生" : ((userData[i].power == 2) ? "家长" : "管理员");
+                let isIdentify = "";
+                switch (userData[i].isIdentify){
+                    case 1:
+                        isIdentify = "通过";
+                        break;
+                    case 2:
+                        isIdentify = "未通过";
+                        break;
+                    case 0:
+                        if(userData[i].studentCard != null){
+                            isIdentify = "待审核";
+                        } else {
+                            isIdentify = "";
+                        }
+                        break;
+                }
+			    if(uid.indexOf(text)!=-1 || uname.indexOf(text)!=-1 || phone.indexOf(text)!=-1 || userType.indexOf(text)!=-1 || school.indexOf(text)!=-1 || degree.indexOf(text)!=-1 || isIdentify.indexOf(text)!=-1){
+			        userNum++;
+			        userList.push(userData[i]);
+				}
+			}
+            for(let i=0; i<userList.length; i++){
+                let uid = userList[i].uid;
+                let img = "";
+                let power = "";
+                let isIdentify = "";
+                if(userList[i].power == 1){
+                    if(userList[i].studentCard != null){
+                        img = "<img class='img-rounded' alt='证件照' src='../../"+filterNull(userList[i].studentCard)+"'>";
+                    } else {
+                        img = "<img class='img-rounded' alt='证件照' src='../../userPhoto/zwzjz.png'>";
+                    }
+                    switch (userList[i].isIdentify){
+                        case 1:
+                            isIdentify = "通过";
+                            break;
+                        case 2:
+                            isIdentify = "未通过";
+                            break;
+                        case 0:
+                            if(userList[i].studentCard == null){
+                                isIdentify = "";
+                            }else {
+                                isIdentify = "待审核";
+                            }
+                            break;
+                    }
+                }
+                switch (userList[i].power){
+                    case 1:
+                        power = "学生";
+                        break;
+                    case 2:
+                        power = "家长";
+                        break;
+                    case 3:
+                        power = "管理员";
+                        break;
+                }
+                let user = "\t\t\t\t\t\t\t\t<td>"+filterNull(userList[i].uid)+"</td>\n" +
+                    "\t\t\t\t\t\t\t\t<td>"+power+"</td>\n" +
+                    "\t\t\t\t\t\t\t\t<td>"+filterNull(userList[i].uname)+"</td>\n" +
+                    "\t\t\t\t\t\t\t\t<td><img class='img-rounded' alt='用户头像' src='../../"+filterNull(userList[i].photo)+"'></td>\n" +
+                    "\t\t\t\t\t\t\t\t<td>"+img+"</td>\n" +
+                    "\t\t\t\t\t\t\t\t<td>"+isIdentify+"</td>\n" +
+                    "\t\t\t\t\t\t\t\t<td>"+filterNull(userList[i].school)+"</td>\n" +
+                    "\t\t\t\t\t\t\t\t<td>"+filterNull(userList[i].degree)+"</td>\n" +
+                    "\t\t\t\t\t\t\t\t<td>"+filterNull(userList[i].phone)+"</td>\n";
+                if(userList[i].power==3){
+                    if(userList[i].status==0){
+                        banNum++;
+                    }
+                    $("tbody").append("<tr>\n" + user +
+                        "\t\t\t\t\t\t\t\t<td></td>\n" +
+                        "\t\t\t\t\t\t\t\t<td></td>\n" +
+                        "\t\t\t\t\t\t\t</tr>")
+                }else {
+                    if(userList[i].studentCard != null){
+                        if(userList[i].status==0){
+                            ban++;
+                            $("tbody").append("<tr>\n" + user +
+                                "\t\t\t\t\t\t\t\t<td><button type='button' class='div-button-style div-button-backcolor-1' onclick='upIsIdentify(this,"+'"'+userList[i].uid+'"'+",1)'>通过</button>&nbsp;<button type='button' class='div-button-style div-button-backcolor-2' onclick='upIsIdentify(this,"+'"'+userList[i].uid+'"'+",2)'>不通过</button></td>\n" +
+                                "\t\t\t\t\t\t\t\t<td><button type='button' class='div-button-style div-button-backcolor-2' onclick='permission(this,"+'"'+uid+'"'+")'>解封</button></td>\n" +
+                                "\t\t\t\t\t\t\t</tr>"
+                            );
+                        }else {
+                            $("tbody").append("<tr>\n" + user +
+                                "\t\t\t\t\t\t\t\t<td><button type='button' class='div-button-style div-button-backcolor-1' onclick='upIsIdentify(this,"+'"'+userList[i].uid+'"'+",1)'>通过</button>&nbsp;<button type='button' class='div-button-style div-button-backcolor-2' onclick='upIsIdentify(this,"+'"'+userList[i].uid+'"'+",2)'>不通过</button></td>\n" +
+                                "\t\t\t\t\t\t\t\t<td><button type='button' class='div-button-style div-button-backcolor-1' onclick='prohibition(this,"+'"'+uid+'"'+")'>封禁</button></td>\n" +
+                                "\t\t\t\t\t\t\t</tr>"
+                            );
+                        }
+                    }else {
+                        if(userList[i].status==0){
+                            ban++;
+                            $("tbody").append("<tr>\n" + user +
+                                "\t\t\t\t\t\t\t\t<td></td>\n" +
+                                "\t\t\t\t\t\t\t\t<td><button type='button' class='div-button-style div-button-backcolor-2' onclick='permission(this,"+'"'+uid+'"'+")'>解封</button></td>\n" +
+                                "\t\t\t\t\t\t\t</tr>"
+                            );
+                        }else {
+                            $("tbody").append("<tr>\n" + user +
+                                "\t\t\t\t\t\t\t\t<td></td>\n" +
+                                "\t\t\t\t\t\t\t\t<td><button type='button' class='div-button-style div-button-backcolor-1' onclick='prohibition(this,"+'"'+uid+'"'+")'>封禁</button></td>\n" +
+                                "\t\t\t\t\t\t\t</tr>"
+                            );
+                        }
+                    }
+                }
+            }
+            $("#Sum").html("总量:"+userNum);
+            $("#ban").html("封禁:"+banNum);
+            $("#online").html("在线:未统计");
+        }
+
+        function filterNull(arg) {
+			if(arg == null){
+			    return "";
+			}
+			return arg;
+        }
+
+        function upIsIdentify(obj,uid,isIdentify) {
+            $.ajax({
+                url:"/updateIsIdentify",
+                type:"post",
+                data:{
+                    "isIdentify":isIdentify,
+                    "uid":uid
+                },
+                dataType:"text",
+                success:function (data) {
+                    if(data == "success"){
+                        let isIde = isIdentify == 1 ? "通过" : "未通过";
+                        $(obj).parent().parent().children("td").eq(5).html(isIde);
+                    }
+                }
+            })
+        }
+	</script>
+	</body>
+</html>

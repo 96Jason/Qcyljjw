@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--地址选择-->
+	<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+	<meta content="yes" name="apple-mobile-web-app-capable"/>
+	<meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+	<meta content="telephone=no" name="format-detection"/>
+	<link rel="stylesheet" href="../../address/css/ydui.css?rev=@@hash"/>
+	<script src="../../address/js/ydui.flexible.js"></script>
+	<title>青出于蓝家教网-家教投简</title>
+	<!-- 图标 -->
+	<link rel="icon" href="../../images/logo-min.ico" type="image/x-icon" />
+	<!--width少于768去掉滚动条-->
+	<link rel="stylesheet" href="../../css/apphiddenscroll.css">
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+	<script src="../../js/common/jquery-3.4.1.min.js"></script>
+	<script src="../../bootstrap/js/bootstrap.min.js"></script>
+	<!--加密解密-->
+	<script src="../../js/common/crypto-js.js"></script>
+	<!--用于退出提示-->
+	<style>
+        body{
+            overflow-x: hidden;
+        }
+		.toast-wrap{
+			opacity: 0;
+			position: fixed;
+			bottom: 10%;
+			color: #fff;
+			width: 100%;
+			text-align: center;
+		}
+		.toast-msg{
+			background-color: rgba(0,0,0,0.7);
+			padding: 2px 5px;
+			border-radius: 5px;
+		}
+		.toastAnimate{
+			animation: toastKF 2s;
+		}
+		@keyframes toastKF{
+			0% {opacity: 0;}
+			25% {opacity: 1; z-index: 9999}
+			50% {opacity: 1; z-index: 9999}
+			75% {opacity: 1; z-index: 9999}
+			100% {opacity: 0; z-index: 0}
+		}
+	</style>
+	<style>
+		button{
+			margin: 0;
+			padding: 0;
+		}
+		input::-webkit-input-placeholder {
+		    color: #ccc;
+		}
+		input::-moz-input-placeholder {
+		    color: #ccc;
+		}
+		input::-ms-input-placeholder {
+		    color: #ccc;
+		}
+		.fe-input-1{
+			width: 250px; 
+			height: 30px;
+			outline: none;
+			border: 0;
+			border-radius: 5px;
+		}
+		.fe-input-2{
+			width: 60px; 
+			height: 30px;
+			outline: none;
+			border: 0;
+			border-radius: 5px;
+		}
+		.fe-input-3{
+			width: 60px; 
+			height: 30px;
+			outline: none;
+			border: 0;
+			border-radius: 5px;
+			margin-right: 8px;
+		}
+		.fe-li-1{
+			line-height: 50px;
+			margin-left: 15px;
+		}
+		.button-style-2{
+			line-height: 30px;
+			border: 0;
+			border-radius: 5px;
+			outline: none;
+			margin-top: 10px;
+			width: 30px;
+			height: 30px;
+		}
+		.button-style-2:hover{
+			background-color: white;
+		}
+
+		.fe-div-1{
+			height: 350px;
+			padding: 10px;
+		}
+		.fe-div-2{
+			border: #e7e7e7 solid 1px;
+			border-radius: 5px;
+			width: 100%; 
+			height: 100%; 
+			/* background-color: #f8f8f8; */
+			padding: 10px;
+		}
+		.fe-div-2:hover{
+			border: red solid 1px;
+		}
+		.fe-img-1{
+			width: 100px; 
+			height: 100px;
+		}
+		.fe-p-1{
+			color: #FF6A6A;
+		}
+		.fe-a-1{
+			
+		}
+		.fe-a-1:hover{
+			text-decoration: none;
+			color: red;
+		}
+		.text-gradient{
+			background-image: linear-gradient(to right,blue 0%,#00FFFF 100%);
+			-webkit-background-clip: text;
+		}
+	</style>
+</head>
+<body>
+<!--退出提示-->
+<div class="toast-wrap">
+	<span class="toast-msg"></span>
+</div>
+
+<nav class="navbar navbar-default" role="navigation">
+	<div class="container-fluid"> 
+	<div class="navbar-header text-gradient">
+		<button type="button" class="navbar-toggle" data-toggle="collapse"
+				data-target="#example-navbar-collapse">
+			<span class="sr-only">切换导航</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand" href="#" style="color: transparent;font-family: STXingkai;font-weight: 600;">青出于蓝家教网</a>
+	</div>
+	<div class="collapse navbar-collapse" id="example-navbar-collapse">
+		<ul class="nav navbar-nav">
+			<li class="active"><a href="javascript:void(0);">家庭教师</a></li>
+			<!--<li><a href="javascript:void(0);" onclick="toFe_workPage()">家教工作</a></li>-->
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+					发布讯息 <b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu">
+					<li><a href="javascript:void(0);" onclick="toSendRecruitPage()">招聘发布</a></li>
+					<!--<li><a href="javascript:void(0);" onclick="toSendApplyPage()">简历发布</a></li>-->
+				</ul>
+			</li>
+			<li><a href="javascript:void(0);" onclick="toChatPage()">在线聊天</a></li>
+			<li><a href="javascript:void(0);" onclick="toPersonalPage()">个人中心</a></li>
+			<li class="fe-li-1"><input name="city" autocomplete="off" id="city" class="fe-input-1" type="text" placeholder="地区选择" readonly /></li>
+			<li class="fe-li-1"><input id="subject" autocomplete="off" class="fe-input-2" type="text" placeholder="科目选择" /></li>
+			<li class="fe-li-1">
+				<input name="min-salary" id="min-salary" autocomplete="off" onblur="min_max()" onkeyup="value=value.replace(/^(0[0-9]+)|[^\d]+/g,'')" maxlength="4" class="fe-input-3" type="text" placeholder="最低薪资" />-
+				<input name="max-salary" id="max-salary" autocomplete="off" onblur="max_min()" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" maxlength="4" class="fe-input-3" type="text" placeholder="最高薪资" />
+			</li>
+			<li class="fe-li-1">
+				<button onclick="reset()" class="button-style-2">重置</button>
+				<button onclick="findRecruits()" class="button-style-2">搜索</button>
+			</li>
+			<li id="nickname" class="fe-li-1" style="font-family: STXingkai;font-weight: bold;"></li>
+			<li><a href="/logout">退出</a></li>
+		</ul>
+	</div>
+	</div>
+</nav>
+
+<!-- 主体内容总分 -->
+<div class="row">
+	<div class="col-md-12">
+		<div id="sendApplysContainer" class="container">
+			<!--通过js插入-->
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+    //定义全局变量，用于查询
+    var dataList = null;
+
+    function getUid() {
+        //页面跳转部分
+        var currentUrl = window.location.href;
+        var dataList = currentUrl.split("?");
+        var start = dataList[1].indexOf("=");
+        var uid = dataList[1].substring(start+1);
+        return uid
+    }
+
+    function getUid2() {
+        //页面跳转部分
+        var currentUrl = window.location.href;
+        var dataList = currentUrl.split("?");
+        var start = dataList[1].indexOf("=");
+        // //解密
+        var aseKey = "12345678";
+        var uid = CryptoJS.AES.decrypt(dataList[1].substring(start+1), CryptoJS.enc.Utf8.parse(aseKey), {
+            mode: CryptoJS.mode.ECB,
+            padding: CryptoJS.pad.Pkcs7
+        }).toString(CryptoJS.enc.Utf8);
+        return uid
+    }
+
+    $(function () {
+        var uid = getUid2();
+        $.ajax({
+            type:"get",
+            url:"/personalInfo",
+            data:{"uid":uid},
+            dataType:"json",
+            success:function (user) {
+                $("#nickname").html(user.nickname);
+            }
+        })
+    })
+
+    $(function () {
+        getAllIntro();
+    });
+
+    //获取所有列表
+    function getAllIntro() {
+        $.ajax({
+            type:"get",
+            url:"/getAllIntro",
+			data:{status:1},
+            dataType:"json",
+            success:function (sendIntros) {
+                if(sendIntros.length>0){
+                    dataList = sendIntros;//赋值给全局变量
+                    for(var i = 0; i < sendIntros.length; i++){
+                        var user_id = sendIntros[i].user_id;
+                        $("#sendApplysContainer").append('<div class="col-md-4 fe-div-1">\n' +
+                            '\t<div class="fe-div-2">\n' +
+                            '\t\t<div class="col-md-12 text-center">\n' +
+                            '\t\t\t<img src="../../'+sendIntros[i].photo+'" class="img-circle fe-img-1" style="width: 100px; height: 100px;">\n' +
+                            '\t\t</div>\n' +
+                            '\t\t<div class="col-md-12 text-center">\n' +
+                            '\t\t\t<h4>'+sendIntros[i].uname+'</h4>\n' +
+                            '\t\t\t<p class="fe-p-1">'+sendIntros[i].subject+'</p>\n' +
+                            '\t\t\t<p class="fe-p-1">'+sendIntros[i].salary+'/时</p>\n' +
+                            '\t\t\t<p>'+sendIntros[i].address+'</p>\n' +
+                            '\t\t\t<p>'+getFormatDate(sendIntros[i].send_time)+'</p>\n' +
+                            '\t\t\t<p><a class="fe-a-1" href="javascript:void(0);" onclick="tofe_tutor_detailPage('+sendIntros[i].id+','+"'"+user_id+"'"+')">查看详情>></a></p>\n' +
+                            '\t\t</div>\n' +
+                            '\t</div>\n' +
+                            '</div>');
+                    }
+                }
+            },
+            error:function () {
+                alert("系统异常");
+            }
+        })
+    }
+
+    // 格式：yyyy-MM-dd HH:mm:SS
+    function getFormatDate(dateString){
+        var nowDate = new Date(dateString);
+        var year = nowDate.getFullYear();
+        var month = nowDate.getMonth() + 1 < 10 ? "0" + (nowDate.getMonth() + 1) : nowDate.getMonth() + 1;
+        var date = nowDate.getDate() < 10 ? "0" + nowDate.getDate() : nowDate.getDate();
+        var hour = nowDate.getHours()< 10 ? "0" + nowDate.getHours() : nowDate.getHours();
+        var minute = nowDate.getMinutes()< 10 ? "0" + nowDate.getMinutes() : nowDate.getMinutes();
+        var second = nowDate.getSeconds()< 10 ? "0" + nowDate.getSeconds() : nowDate.getSeconds();
+        return year + "-" + month + "-" + date+" "+hour+":"+minute+":"+second;
+    }
+
+    function findRecruits() {
+        var city = $("#city").val();
+        var minSalary = $("#min-salary").val();
+        var maxSalary = $("#max-salary").val();
+        var subject = $("#subject").val();
+
+        $("#sendApplysContainer").html("");
+        if(city=="" && minSalary=="" && maxSalary=="" && subject==""){
+            getAllIntro();
+        }else{
+            if(city==""){
+                if(subject==""){
+                    if(minSalary==""){
+                        if(maxSalary==""){
+                            getAllIntro();
+                        }else{
+                            for(var i = 0; i < dataList.length; i++){
+                                if(dataList[i].salary<=maxSalary){
+                                    outRecruits(dataList[i]);
+                                }
+                            }
+                        }
+                    }else{
+                        if(maxSalary==""){
+                            for(var i = 0; i < dataList.length; i++){
+                                if(dataList[i].salary>=minSalary){
+                                    outRecruits(dataList[i]);
+                                }
+                            }
+                        }else{
+                            for(var i = 0; i < dataList.length; i++){
+                                if(dataList[i].salary<=maxSalary && dataList[i].salary>=minSalary){
+                                    outRecruits(dataList[i]);
+                                }
+                            }
+                        }
+                    }
+                }else{
+                    if(minSalary==""){
+                        if(maxSalary==""){
+                            for(var i = 0; i < dataList.length; i++){
+                                if(dataList[i].subject.indexOf(subject)!=-1){
+                                    outRecruits(dataList[i]);
+                                }
+                            }
+                        }else{
+                            for(var i = 0; i < dataList.length; i++){
+                                if(dataList[i].subject.indexOf(subject)!=-1 && dataList[i].salary<=maxSalary){
+                                    outRecruits(dataList[i]);
+                                }
+                            }
+                        }
+                    }else{
+                        if(maxSalary==""){
+                            for(var i = 0; i < dataList.length; i++){
+                                if(dataList[i].subject.indexOf(subject)!=-1 && dataList[i].salary>=minSalary){
+                                    outRecruits(dataList[i]);
+                                }
+                            }
+                        }else{
+                            for(var i = 0; i < dataList.length; i++){
+                                if(dataList[i].subject.indexOf(subject)!=-1 && dataList[i].salary<=maxSalary && dataList[i].salary>=minSalary){
+                                    outRecruits(dataList[i]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }else{
+                if(subject==""){
+                    if(minSalary==""){
+                        if(maxSalary==""){
+                            for(var i = 0; i < dataList.length; i++){
+                                if(dataList[i].address.indexOf(city)!=-1){
+                                    outRecruits(dataList[i]);
+                                }
+                            }
+                        }else{
+                            for(var i = 0; i < dataList.length; i++){
+                                if(dataList[i].address.indexOf(city)!=-1 && dataList[i].salary<=maxSalary){
+                                    outRecruits(dataList[i]);
+                                }
+                            }
+                        }
+                    }else{
+                        if(maxSalary==""){
+                            for(var i = 0; i < dataList.length; i++){
+                                if(dataList[i].address.indexOf(city)!=-1 && dataList[i].salary>=minSalary){
+                                    outRecruits(dataList[i]);
+                                }
+                            }
+                        }else{
+                            for(var i = 0; i < dataList.length; i++){
+                                if(dataList[i].address.indexOf(city)!=-1 && dataList[i].salary>=minSalary && dataList[i].salary<=maxSalary){
+                                    outRecruits(dataList[i]);
+                                }
+                            }
+                        }
+                    }
+                }else{
+                    if(minSalary==""){
+                        if(maxSalary==""){
+                            for(var i = 0; i < dataList.length; i++){
+                                if(dataList[i].address.indexOf(city)!=-1 && dataList[i].subject.indexOf(subject)!=-1){
+                                    outRecruits(dataList[i]);
+                                }
+                            }
+                        }else{
+                            for(var i = 0; i < dataList.length; i++){
+                                if(dataList[i].address.indexOf(city)!=-1 && dataList[i].subject.indexOf(subject)!=-1 && dataList[i].salary<=maxSalary){
+                                    outRecruits(dataList[i]);
+                                }
+                            }
+                        }
+                    }else{
+                        if(maxSalary==""){
+                            for(var i = 0; i < dataList.length; i++){
+                                if(dataList[i].address.indexOf(city)!=-1 && dataList[i].subject.indexOf(subject)!=-1 && dataList[i].salary>=minSalary){
+                                    outRecruits(dataList[i]);
+                                }
+                            }
+                        }else{
+                            for(var i = 0; i < dataList.length; i++){
+                                if(dataList[i].address.indexOf(city)!=-1 && dataList[i].subject.indexOf(subject)!=-1 && dataList[i].salary>=minSalary && dataList[i].salary<=maxSalary){
+                                    outRecruits(dataList[i]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    function reset() {
+        $("#city").val("");
+        $("#min-salary").val("");
+        $("#max-salary").val("");
+        $("#subject").val("");
+    }
+
+    function outRecruits(dataList) {
+        var user_id = dataList.user_id;
+        $("#sendApplysContainer").append('<div class="col-md-3 fe-div-1">\n' +
+            '\t<div class="fe-div-2">\n' +
+            '\t\t<div class="col-md-12 text-center">\n' +
+            '\t\t\t<img src="../../'+dataList.photo+'" class="img-circle fe-img-1" style="width: 100px; height: 100px;">\n' +
+            '\t\t</div>\n' +
+            '\t\t<div class="col-md-12 text-center">\n' +
+            '\t\t\t<h4>'+dataList.uname+'</h4>\n' +
+            '\t\t\t<p class="fe-p-1">'+dataList.subject+'</p>\n' +
+            '\t\t\t<p class="fe-p-1">'+dataList.salary+'/时</p>\n' +
+            '\t\t\t<p>'+dataList.address+'</p>\n' +
+            '\t\t\t<p>'+getFormatDate(dataList.send_time)+'</p>\n' +
+            '\t\t\t<p><a class="fe-a-1" href="javascript:void(0);" onclick="tofe_tutor_detailPage('+dataList.id+','+"'"+user_id+"'"+')">查看详情>></a></p>\n' +
+            '        </div>\n' +
+            '    </div>\n' +
+            '</div>')
+    }
+
+    function tofe_tutor_detailPage(id,userId) {
+        var uid = getUid2();
+        var url="/html/infoissue/fe-resume-article.html?id="+id+"&uid="+uid+"&user_id="+userId;
+        //window.open(url);//打开新窗口
+		window.location.href=url;
+    }
+    function toSendRecruitPage() {
+        var uid = getUid();
+        window.location.href="/html/infoissue/fe-post-recruit.html?uid="+uid;
+    }function toFe_workPage() {
+        var uid = getUid();
+        window.location.href="/html/infoissue/fe-tutor-recruit.html?uid="+uid;
+    }
+    function toSendApplyPage() {
+        var uid = getUid();
+        window.location.href="/html/infoissue/fe-post-resume.html?uid="+uid;
+    }
+    function toPersonalPage() {
+        var uid = getUid();
+        window.location.href="/html/personal/fe-person-center.html?uid="+uid;
+    }
+    function toChatPage() {
+        var uid = getUid();
+        window.location.href="/html/chat.html?uid="+uid;
+    }
+</script>
+<!-- 最大最小薪资输入框数值校验 -->
+<script>
+    function min_max(){
+        var min = document.getElementById("min-salary").value;
+        var max = document.getElementById("max-salary").value;
+        if(max!=""){
+            if(min!=""){
+                min = parseInt(min);
+                max = parseInt(max);
+                if(min>=max){
+                    alert("最低薪资不能大于等于最高薪资");
+                    document.getElementById("min-salary").value="";
+                }
+            }
+        }
+    }
+    function max_min(){
+        var min = document.getElementById("min-salary").value;
+        var max = document.getElementById("max-salary").value;
+        if(min!=""){
+            if(max!=""){
+                min = parseInt(min);
+                max = parseInt(max);
+                if(max<=min){
+                    alert("最高薪资不能小于等于最低薪资");
+                    document.getElementById("max-salary").value="";
+                }
+            }
+        }
+    }
+</script>
+<!--地址选择-->
+<script src="../../address/js/ydui.citys.js"></script>
+<script src="../../address/js/ydui.js"></script>
+<script>
+    /**
+     * 默认调用
+     */
+    !function () {
+        var $target = $('#city');
+
+        $target.citySelect();
+
+        $target.on('click', function (event) {
+            event.stopPropagation();
+            $target.citySelect('open');
+        });
+
+        $target.on('done.ydui.cityselect', function (ret) {
+            $(this).val(ret.provance + ' ' + ret.city + ' ' + ret.area);
+        });
+    }();
+</script>
+<!--用于手机端双击返回-->
+<script>
+    document.addEventListener('plusready', function(a) {
+        var first = null;
+        plus.key.addEventListener('backbutton', function() {
+            //首次按键，提示‘再按一次退出应用’
+            if (!first) {
+                first = new Date().getTime();
+                toast('再按一次退出应用');
+                setTimeout(function() {
+                    first = null;
+                }, 1000);
+            } else {
+                if (new Date().getTime() - first < 1000) {
+                    plus.runtime.quit();
+                }
+            }
+        }, false);
+    });
+</script>
+<!--用于退出提示-->
+<script>
+    function toast(msg){
+        setTimeout(function(){
+            document.getElementsByClassName('toast-wrap')[0].getElementsByClassName('toast-msg')[0].innerHTML=msg;
+            var toastTag = document.getElementsByClassName('toast-wrap')[0];
+            toastTag.className = toastTag.className.replace('toastAnimate','');
+            setTimeout(function(){
+                toastTag.className = toastTag.className + ' toastAnimate';
+            }, 100);
+        },500);
+    }
+</script>
+</body>
+</html>
