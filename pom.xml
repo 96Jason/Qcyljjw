@@ -8,7 +8,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.xjh</groupId>
 	<artifactId>familyeducation</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0.RELEASE</version>
 	<packaging>jar</packaging>
 	<name>familyeducation</name>
 	<description>Demo project for Spring Boot</description>
