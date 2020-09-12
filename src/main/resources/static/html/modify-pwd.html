@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>青出于蓝家教网-修改密码</title>
+	<!-- 图标 -->
+	<link rel="icon" href="../images/logo-min.ico" type="image/x-icon" />
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+	<script src="../js/common/jquery-3.4.1.min.js"></script>
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+	<style>
+		body{
+			background-color: #fbfbfb;
+		}
+		.fe-a-1{
+			color: blue;
+			font-size: 1.2rem;
+		}
+		.fe-a-1:hover{
+			text-decoration: none;
+			color: #f0ad4e;
+		}
+		
+		.title-line {
+		    width: 80%;
+		    height: 28px;
+		    margin: 0 auto;
+		    border-bottom: 1px solid #ddd;
+		    margin-bottom: 28px;
+		    text-align: center;
+		}		
+		.title-line .tit {
+		    height: 56px;
+		    line-height: 56px;
+		    margin: 0 auto;
+		    padding: 0 20px;
+		    font-size: 30px;
+		    background: #fbfbfb;
+		}
+		.fe-padding-1{
+			padding-top: 18px;
+		}
+		.fe-p-1{
+			color: red;
+			height: 18px;
+			line-height: 18px;
+			margin: 0;
+		}
+		.code{}
+	</style>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div style="width: 10%; height: 110px; float: left;"></div>
+			<div style="width: 90%; height: 110px; float: left;padding-top: 58px;">
+				<img src="../../carousel/logo-2.png" />
+			</div>
+		</div>
+		<div class="row">
+			<div style="width: 10%; height: 20px; float: left;"></div>
+			<div style="width: 90%; height: 20px; float: left; padding-left: 15px;">
+				<a class="fe-a-1" href="index.html">登录</a><span>&nbsp>&nbsp修改密码</span>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="title-line">
+					<span class="tit">修改密码</span>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4"></div>
+			<div class="col-md-4">
+				<form id="modifyPwdForm" role="form" action="">
+					<div id="phone-tip" class="fe-p-1 col-md-12"><!--js插入--></div>
+					<div class="form-group col-md-12">
+						<input type="text" class="form-control" id="phone" name="phone" placeholder="手机号码" onkeyup="value=value.replace(/^(0[0-9]+)|[^\d]+/g,'')" onblur="phonePatternCheck()" maxlength="11" />
+					</div>
+					<div id="pwd-tip" class="fe-p-1 col-md-12"><!--js插入--></div>
+					<div class="form-group col-md-12">
+						<input type="password" class="form-control" id="pwd" name="pwd" placeholder="新密码(6-12位非中文字符,区别大小写)" onkeyup="value=value.replace(/[\u4e00-\u9fa5]+/g,'')" onchange="pwdLengthCheck()" maxlength="12" />
+						<span id="eye" class="glyphicon glyphicon-eye-close form-control-feedback" style="right: 15px;pointer-events: auto;"></span> <!--小图标元素-->
+					</div>
+					<div id="code-tip" class="fe-p-1 col-md-12"><!--js插入--></div>
+					<div class="form-group col-md-12" style="height: 34px;">
+						<div style="width: 70%; float: left;">
+							<input type="text" class="form-control" id="code" name="code" placeholder="验证码" onkeyup="value=value.replace(/[^\d]+/g,'')" maxlength="6" autocomplete="off" />
+						</div>
+						<div style="width: 30%; float: left;">
+							<button class="btn btn-success code" style="width: 100%;" type="button" onclick="getCode()">获取验证码</button>
+						</div>
+					</div>
+					<div class="col-md-12 fe-padding-1">
+						<button type="submit" class="btn btn-warning" style="width: 100%;">确认修改</button>
+					</div>
+				</form>
+			</div>
+			<div class="col-md-4"></div>
+		</div>
+	</div>
+<script>
+	// 手机格式验证
+	function phonePatternCheck() {
+        var phone = $("#phone").val();
+        if(phone == null){
+            $("#phone-tip").html("请输入手机号");
+		}else if(phone.length != 11){
+            $("#phone-tip").html("手机号不合法");
+		}else {
+            $("#phone-tip").html("");
+		}
+    }
+    // 密码长度验证
+    function pwdLengthCheck() {
+		if($("#pwd").val().length < 6){
+            $("#pwd-tip").html("不能少于6位");
+		}else {
+            $("#pwd-tip").html("");
+		}
+    }
+    // 获取验证码
+    function getCode() {
+        var phone = $("#phone").val();
+        if(phone != "" && phone.length == 11){
+            $.ajax({
+                type:"get",
+                url:"/sendCodeForModifyPwd",
+                data:{"phone":phone},
+                dataType:"text",
+                success:function (result) {
+                    if(result == "success"){
+                        countDown();
+                    }else if(result == "notExisted"){
+                        $("#phone-tip").html("用户未注册");
+                    }else if(result == "failure"){
+                        alert("修改密码失败");
+                    }
+                },
+                error:function () {
+                    alert("系统异常");
+                }
+            })
+		}
+    }
+    //验证码有效时间倒计时
+    function countDown() {
+        $(".code").removeAttr("onclick");
+        var validTime = 120;
+        timer = setInterval(function () {
+            $(".code").html(validTime+"s");
+            validTime--;
+            if(validTime<0){
+                $(".code").html("重新获取");
+                clearInterval(timer);
+                $(".code").attr("onclick","getCode()");
+            }
+        },1000);
+    }
+	// 眼睛
+    $("#eye").on("click",function(){
+        if($("#eye").hasClass('glyphicon-eye-close')){
+            $("#eye").removeClass("glyphicon-eye-close");
+            $("#eye").addClass("glyphicon-eye-open");
+            $("#pwd").attr("type","text");
+        }else if($("#eye").hasClass('glyphicon-eye-open')){
+            $("#eye").removeClass("glyphicon-eye-open");
+            $("#eye").addClass("glyphicon-eye-close");
+            $("#pwd").attr("type","password");
+        }
+
+    })
+
+	// 修改（重置）密码
+    $("#modifyPwdForm").on("submit",function (e) {
+        e.preventDefault();
+        var phone = $("#phone").val();
+        if(phone == null || phone.length != 11){
+            $("#phone-tip").html("手机号不合法");
+        }else if($("#pwd").val().length < 6){
+            $("#pwd-tip").html("不能少于6位");
+        }else{
+            $.ajax({
+                type:"post",
+                url:"/resetPwd",
+                data:$("#modifyPwdForm").serialize(),
+                dataType:"text",
+                success:function (data) {
+                    if(data=="success"){//注册成功
+                        alert("密码修改成功，请登录");
+                        window.location.href="/index.html";
+                    }else if(data=="resetError"){
+                        alert("服务器异常，请稍后再试试");
+                    }else if(data=="codeError"){
+                        $("#code-tip").html("验证码不正确");
+                    }
+                },
+                error:function () {
+                    alert("连接服务器异常");
+                }
+            })
+		}
+    })
+</script>
+	<!--用于解决手机端点一下返回键就退出的问题 让它返回上一页面-->
+	<script src="../js/common/resolveAppBack.js"></script>
+</body>
+</html>

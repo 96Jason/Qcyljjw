@@ -1,0 +1,300 @@
+body{
+    background-color: rgb(82, 86, 89);
+    overflow: hidden;
+}
+.clickstyle{
+    background-color: #c1bfbf;
+}
+.black-box-shadow{
+    -webkit-box-shadow: black 0px 0px 10px;
+    -moz-box-shadow: black 0px 0px 10px;
+    box-shadow: black 0px 0px 10px;
+}
+/*聊天室*/
+.room{
+    width:100%;
+    height:100%;
+    border: 0;
+    overflow:hidden;
+}
+.room:hover{
+    overflow: scroll;
+}
+.room::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 10px;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 1px;
+}
+.room::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    border-radius: 10px;
+    /*-webkit-box-shadow: inset 0 0 5px #c1bfbf;*/
+    background: #c1bfbf;
+}
+.room::-webkit-scrollbar-track {/*滚动条里面轨道*/
+    /*-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);*/
+    border-radius: 10px;
+    /*background: #EDEDED;*/
+}
+/*信息容器*/
+.msg-container{
+    clear: both;
+    font-size: 0.8rem;
+    width: auto;
+    height: auto;
+}
+/*信息容器-左*/
+.msg-container-left{
+    float: left;
+    margin: 7px 100px 7px 15px;
+}
+/*信息容器-右*/
+.msg-container-right{
+    float: right;
+    margin: 7px 15px 7px 100px;
+}
+/*信息内容框*/
+.msg-content{
+    height: auto;
+    max-width: 386px;
+}
+/*信息内容-用户名称*/
+.msg-context-uname{
+    width: 100%;
+    font-size: 0.6rem;
+    color: #c1bfbf;
+}
+/*信息内容-文字*/
+.msg-context-info-left{
+    font-size: 1.5rem;
+    float: left;
+    margin-top: 5px;
+    padding: 10px;
+    width: auto;
+    /*border: 0.5px solid #c1bfbf;*/
+    box-shadow: 0 0 1px #e9e7e6;
+    background-color: #ffffff;
+    border-radius: 5px;
+    position: relative;
+    word-wrap:break-word;
+}
+.msg-context-info-right{
+    font-size: 1.5rem;
+    float: right;
+    margin-top: 5px;
+    padding: 10px;
+    width: auto;
+    /*border: 1px solid #c1bfbf;*/
+    box-shadow: 0 0 1px #e9e7e6;
+    background-color: #9eea6a;
+    border-radius: 5px;
+    position: relative;
+    word-wrap:break-word;
+}
+/*信息内容-左*/
+.msg-content-left{
+    margin-left: 10px;
+    float: left;
+}
+/*信息内容-右*/
+.msg-content-right{
+    margin-right: 10px;
+    float: right;
+}
+/*头像样式*/
+.img-style{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+/*.textarea-style{*/
+    /*border: 0;*/
+    /*width: 100%;*/
+    /*height: 60%;*/
+    /*resize: none;!*取消拖动 *!*/
+    /*outline: none;!* 取消边框聚集 *!*/
+/*}*/
+/*.textarea-container{*/
+    /*padding: 5px;*/
+    /*border: 0.5px solid #c1bfbf;*/
+    /*margin-left:auto;*/
+    /*margin-right:auto;*/
+    /*width: 590px;*/
+    /*height: 80px;*/
+/*}*/
+.button-style{
+    border: 0.5px solid #c1bfbf;
+    color: #c1bfbf;
+    background-color: #f5f5f5;
+    font-size: 0.8rem;
+}
+.text-right{
+    text-align: right;
+}
+.msg-context-info-right:before {
+    content: '';
+    width: 0;
+    height: 0;
+    border: 7px solid transparent;
+    /*border-left-color: #e9e7e6;*/
+    position: absolute;
+    left: 100%;
+    top: 14px;
+    margin-top: -7px;
+}
+.msg-context-info-right:after {
+    content: "";
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-left-color: #9eea6a;
+    position: absolute;
+    left: 100%;
+    top: 14px;
+    margin-top: -6px;
+}
+.msg-context-info-left:before {
+    content: '';
+    width: 0;
+    height: 0;
+    border: 7px solid transparent;
+    /*border-right-color: #e9e7e6;*/
+    position: absolute;
+    left: -14px;
+    top: 14px;
+    margin-top: -7px;
+}
+.msg-context-info-left:after {
+    content: "";
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-right-color: #FFFFFF;
+    position: absolute;
+    left: -11.5px;
+    top: 14px;
+    margin-top: -6px;
+}
+
+.img-list{
+    width: 45px;
+    height: 45px;
+    border-radius: 3px;
+}
+.div-list{
+    background-color: #e9e7e6;
+    padding: 0;
+    height: auto;
+    overflow-y:hidden;
+}
+.div-list:hover{
+    overflow-y:scroll;
+}
+.div-list-content{
+    height: 65px;
+    padding: 10px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    border-bottom: #c1bfbf solid 1px;
+}
+.div-list-content:hover{
+    background-color: #dfdede;
+}
+.div-list::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 10px;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 1px;
+}
+.div-list::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    border-radius: 10px;
+    background: #c1bfbf;
+}
+.div-list::-webkit-scrollbar-track {/*滚动条里面轨道*/
+    border-radius: 10px;
+}
+.button-send{
+    border: 0.5px solid #dfdede;
+    width: 80px;
+    height: 35px;
+    font-size: 1.5rem;
+    background-color: #e9e7e6;
+}
+.button-back{
+    width: 100px;
+    height: 30px;
+    font-size: 1.5rem;
+    background-color: #e9e7e6;
+    border: 0.5px solid #dfdede;
+}
+.button-send:hover, .button-back:hover{
+    color: white;
+    background-color: #2ba245;
+}
+.button-send:focus,
+.button-send:active:focus,
+.button-send.active:focus,
+.button-send.focus,
+.button-send:active.focus,
+.button-send.active.focus {
+    outline: none;
+    border-color: transparent;
+    box-shadow:none;
+}
+.textarea-style{
+    padding-top: 10px;
+    outline: none;
+    text-align: left;
+    border: 0;
+    width: 100%;
+    height: 75px;
+    resize: none;
+    overflow-y: hidden;
+}
+
+.qqFace { margin-top: 4px; background: #fff; padding: 2px; border: 1px #dfe6f6 solid; }
+.qqFace table td { padding: 0px; }
+.qqFace table td img { cursor: pointer; border: 1px #fff solid; }
+.qqFace table td img:hover { border: 1px #0066cc solid; }
+
+@media screen and (min-width: 768px) {
+    .phone-back{
+        display: none;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    html,body{
+        background-color: transparent;
+        overflow: hidden;
+    }
+    #initial-interface{
+        display: none;
+    }
+    .phone-container{
+        margin: 0;
+        padding: 0;
+    }
+    /*用于手机端返回*/
+    .phone-back{
+        width: 100%;
+        display: block;
+        background-color: #e9e7e6;
+        border-bottom: #c1bfbf solid 1px;
+        padding: 5px 10px 5px 10px;
+    }
+    .black-box-shadow{
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+    }
+    .pc-back{
+        display: none;
+    }
+    .div-list{
+        background-color: white;
+    }
+    .msg-content{
+        height: auto;
+        max-width: 286px;
+    }
+    .msg-context-info-left,.msg-context-info-right{
+        max-width: 120px;
+    }
+}

@@ -1,0 +1,7 @@
+@media screen and (max-width: 768px) {
+    html,body{
+        background-color: transparent;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+}

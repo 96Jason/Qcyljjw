@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>青出于蓝家教网-个人中心</title>
+		<!-- 图标 -->
+		<link rel="icon" href="../../images/logo-min.ico" type="image/x-icon" />
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+		<script src="../../js/common/jquery-3.4.1.min.js"></script>
+		<script src="../../bootstrap/js/bootstrap.min.js"></script>
+		<!--加密解密-->
+		<script src="../../js/common/crypto-js.js"></script>
+		<style>
+			body{
+				background-color: rgba(248,248,248,.4);
+                overflow-x: hidden;
+			}
+			.text-gradient{
+				background-image: linear-gradient(to right,blue 0%,#00FFFF 100%);
+				-webkit-background-clip: text;
+			}
+			@media screen and (min-width: 768px) {
+				.div-width-1{
+					width: 15%;
+				}
+				.div-width-2{
+					width: 84%;
+				}
+				.fe-div-1{
+					width: 300px;
+					padding-top: 10px;
+				}
+			}
+			@media screen and (max-width: 768px) {
+			    .div-width-1{
+			    	width: 20%;
+			    }
+			    .div-width-2{
+			    	width: 79%;
+			    }
+				.fe-div-1{
+					padding-top: 10px;
+				}
+				.isDisplay{
+					display: none;
+				}
+				th,td{
+					width: 20%;
+				}
+			}
+			.left-nav-div,.right-nav-div{
+				background-color: white;
+				float: left;
+			}
+			.left-nav-div a{
+				color: black;
+			}
+			.div-border-1{
+				border: solid rgba(0,0,0,.1) 1px;
+				box-shadow: 2px 2px 2px rgba(0,0,0,.1);
+			}
+			.div-height-1{
+				height: 500px;
+			}
+			.live{
+				background-color: #e7e7e7;
+			}
+			.info-font{
+				color: #3399ea;
+			}
+			.info-font:hover{
+				color: #0000FF;
+			}
+			td,th{
+				text-align: center;
+			}
+			.img-color-1,.img-color-2,.img-color-3{
+				cursor: pointer;
+			}
+			.img-color-1:hover{
+				filter: url(#red);
+			}
+			.img-color-2:hover{
+				filter: url(#blue);
+			}
+			.img-color-3:hover{
+				filter: url(#green);
+			}
+			.fe-p-1{
+				color: red;
+				height: 18px;
+				line-height: 18px;
+				margin: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<nav class="navbar navbar-default" role="navigation">
+			<div class="container-fluid"> 
+			<div class="navbar-header text-gradient">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+						data-target="#example-navbar-collapse">
+					<span class="sr-only">切换导航</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#" style="color: transparent;font-family: STXingkai;font-weight: 600;">青出于蓝家教网</a>
+			</div>
+			<div class="collapse navbar-collapse" id="example-navbar-collapse">
+				<div class="pull-left">
+					<ul class="nav navbar-nav">
+						<li id="teacher" style="display: none;"><a href="javascript:void(0)" onclick="toFe_tutorPage()">家庭教师</a></li>
+						<li id="work" style="display: none;"><a href="javascript:void(0)" onclick="toFe_workPage()">家教工作</a></li>
+						<li class="dropdown">
+							<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
+								发布讯息 <b class="caret"></b>
+							</a>
+							<ul class="dropdown-menu">
+								<li id="_recruit" style="display: none;"><a href="javascript:void(0)" onclick="toSendRecruitPage()">招聘发布</a></li>
+								<li id="_resume" style="display: none;"><a href="javascript:void(0)" onclick="toSendApplyPage()">简历发布</a></li>
+							</ul>
+						</li>
+						<li><a href="javascript:void(0)" onclick="toChatPage()">在线聊天</a></li>
+						<li class="active"><a href="javascript:void(0)">个人中心</a></li>
+					</ul>
+				</div>
+				<div class="pull-right">
+					<ul class="nav navbar-nav">
+						<li id="name-tip" style="font-family: STxingkai; font-weight: bold; line-height: 50px;">洪雨雷</li>
+						<li><a href="/logout">退出</a></li>
+					</ul>
+				</div>				
+			</div>
+			</div>
+		</nav>
+		<div class="container" style="padding: 0;">
+			<div class="left-nav-div div-border-1 div-width-1" style="height: 300px;">
+				<ul id="ul2" class="nav nav-stacked">
+					<li onclick="userInfoPage()" class="live"><a href="javascript:void(0)">个人资料</a></li>
+					<li id="resumemgr" style="display: none;" onclick="resumePage()"><a href="javascript:void(0)">我的简历</a></li>
+					<li id="recruitmgr" style="display: none;" onclick="recruitPage()"><a href="javascript:void(0)">我的招聘</a></li>
+					<li onclick="modifyPwdPage()"><a href="javascript:void(0)">修改密码</a></li>
+                    <li id="eduIdentify" style="display: none;" onclick="eduIdentify()"><a href="javascript:void(0)">学历认证</a></li>
+				</ul>
+			</div>
+			<!-- 主体页面内容 -->
+			<div id="main-body">
+				
+			</div>
+			<!--修改密码-->
+			<template id="modify-pwd">
+				<div class="right-nav-div div-height-1 div-width-2 div-border-1" style="padding: 20px; margin-left: 1px;">
+					<h4 style="height: 40px; border-bottom: solid rgba(0,0,0,0.3) 1px;"><b>修改密码</b></h4>
+					<div class="fe-div-1">
+						<form onsubmit="return false" id="modifyPwdForm" role="form" class="form-horizontal">
+							<div id="opwd-tip" class="fe-p-1 col-md-12"><!--js动态插入--></div>
+							<div class="form-group">
+								<div class="col-md-12">
+									<input class="form-control" id="opwd" name="opwd" type="password" onblur="checkOldPwd()" onkeyup="value=value.replace(/[\u4e00-\u9fa5]+/g,'')" maxlength="12" placeholder="旧密码" required />
+								</div>
+							</div>
+							<div id="npwd-tip" class="fe-p-1 col-md-12"><!--js动态插入--></div>
+							<div class="form-group">
+								<div class="col-md-12">
+									<input class="form-control" id="npwd" name="npwd" type="password" onkeyup="value=value.replace(/[\u4e00-\u9fa5]+/g,'')" onblur="pwdLengthCheck()" maxlength="12" placeholder="新密码" required />
+									<span onclick="eyeChange()" id="eye" class="glyphicon glyphicon-eye-close form-control-feedback" style="right: 15px;pointer-events: auto;"></span> <!--小图标元素-->
+								</div>							
+							</div>
+							<div class="form-group text-right">
+								<div class="col-md-12">
+									<button type="button" class="btn btn-default" onclick="resetForm()">重置</button>
+									<button type="button" class="btn btn-warning" onclick="modifyUserPwd()">修改</button>
+								</div>							
+							</div>
+						</form>
+					</div>
+				</div>
+			</template>
+			<!--学历认证-->
+			<template id="education-certification">
+				<div class="right-nav-div div-height-1 div-width-2 div-border-1" style="padding: 20px; margin-left: 1px;">
+					<h4 style="height: 40px; border-bottom: solid rgba(0,0,0,0.3) 1px;"><b>学历认证</b></h4>
+					<div class="fe-div-1">
+						<form id="ec-form" action="" role="form" class="form-horizontal">
+							<div class="form-group">
+								<div class="col-md-12">
+									<input class="form-control" id="school" name="school" type="text" maxlength="30" placeholder="请输入院校" autocomplete="off" required />
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-md-12">
+									<input class="form-control" id="degree" name="degree" type="text" maxlength="30" placeholder="请输入学历" autocomplete="off" required />
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-md-12">
+									<input id="studentCard" name="studentCard" type="file" required />
+								</div>
+							</div>
+							<div class="form-group text-right">
+								<div class="col-md-12">
+									<button type="submit" class="btn btn-default">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</template>
+			<!--我的简历-->
+			<template id="resume">
+				<div class="right-nav-div div-height-1 div-width-2 div-border-1" style="padding: 20px; margin-left: 1px;">
+					<p style="height: 40px; border-bottom: solid rgba(0,0,0,0.3) 1px;font-size: 18px;">
+						<span><b>我的简历</b></span>
+						<span style="float: right;" onclick="toAddResumePage()"><img class="img-color-3" title="添加" src="../../images/add.png" /></span>
+					</p>
+					<div>
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>科目</th>
+									<th class="isDisplay">时间</th>
+									<th>删除</th>
+									<th>编辑</th>
+									<th>刷新</th>
+									<th>发布</th>
+								</tr>
+							</thead>
+							<tbody id="resume-tbody">
+								<!--js插入-->
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</template>
+			<!--我的招聘-->
+			<template id="recruit">
+				<div class="right-nav-div div-height-1 div-width-2 div-border-1" style="padding: 20px; margin-left: 1px;">
+					<p style="height: 40px; border-bottom: solid rgba(0,0,0,0.3) 1px;font-size: 18px;">
+						<span><b>我的招聘</b></span>
+						<span style="float: right;" onclick="toAddRecruitage()"><img class="img-color-3" title="添加" src="../../images/add.png" /></span>
+					</p>
+					<div>
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>科目</th>
+									<th class="isDisplay">时间</th>
+									<th>删除</th>
+									<th>编辑</th>
+									<th>刷新</th>
+									<th>发布</th>
+								</tr>
+							</thead>
+							<tbody id="recruit-tbody">
+								<!--js插入-->
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</template>
+			<!--简历、招聘模板-->
+			<template id="produceRow">
+				<tr>
+					<td>初中数学</td>
+					<td class="isDisplay">2020-01-26</td>
+					<td><img class="img-color-1" title="删除" src="../../images/delete.png" /></td>
+					<td><img class="img-color-2" title="编辑" src="../../images/modify.png" /></td>
+					<td><img class="img-color-3" title="刷新" src="../../images/refresh.png" /></td>
+					<td><input type="checkbox" /></td>
+				</tr>
+			</template>
+			<!--个人资料-->
+			<template id="user-info">
+				<div class="right-nav-div div-height-1 div-width-2 div-border-1" style="padding: 20px; margin-left: 1px;">
+					<h4 style="height: 40px; border-bottom: solid rgba(0,0,0,0.3) 1px;"><b>个人资料</b></h4>
+					<div>
+						<div style="width: 10%; float: left;text-align: center;">
+							<img id="user-img" class="img-circle" style="width: 100%;" />
+							<span class="info-font" style="display: block; padding-top: 10px; cursor: pointer;" onclick="uploadPhoto()">修改头像</span>
+						</div>
+						<div style="width: 90%; float: left; padding: 0px 0px 0px 20px;">
+							<div>
+								<p><b><!--ID：0000000001--></b></p>
+								<p style="border-bottom: solid rgba(0,0,0,0.3) 1px; height: 30px;"><!--注册时间:2020-01-26 17:44:03--></p>
+								<p><span><!--昵称：--></span><span data-toggle="modal" data-target="#modify-userinfo" class="info-font" style="float: right; cursor: pointer;" onclick="transmitParmsToModal()"><!--修改资料--></span></p>
+								<p><!--姓名：--></p>
+								<p><!--年龄：--></p>
+								<p><!--性别：--></p>
+								<p><!--院校：--></p>
+								<p><!--学历：--></p>
+								<p><!--单位：--></p>
+								<p><!--职位：--></p>
+								<p><!--手机：--></p>
+								<p><!--邮箱：--></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</template>
+		</div>
+		<!-- 编辑个人资料模态框 -->
+		<div class="modal" id="modify-userinfo">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4>修改资料</h4>
+					</div>
+					<form id="modifyUserInfoForm" action="" role="form" class="form-horizontal" method="post">
+						<div class="modal-body">
+							<div class="form-group">
+								<label class="control-label col-md-2">昵称：</label>
+								<div class="col-md-5">
+									<input id="nickname" name="nickname" type="text" class="form-control" required maxlength="10" autocomplete="off" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-2">姓名：</label>
+								<div class="col-md-5">
+									<input id="uname" name="uname" type="text" class="form-control" maxlength="10" autocomplete="off" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-2">年龄：</label>
+								<div class="col-md-5">
+									<input id="age" name="age" type="text" class="form-control" onkeyup="value=value.replace(/[^\d]+/g,'')" maxlength="3" autocomplete="off" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-2">性别：</label>
+								<div class="col-md-5">
+									<input id="sex" name="sex" type="text" class="form-control" onkeyup="value=value.replace(/[^男|女]+/g,'')" list="sexList" maxlength="1" />
+									<datalist id="sexList">
+										<option>男</option>
+										<option>女</option>
+									</datalist>
+								</div>
+							</div>
+							<div id="unit-container" class="form-group">
+								<label class="control-label col-md-2">单位：</label>
+								<div class="col-md-5">
+									<input id="unit" name="unit" type="text" class="form-control" maxlength="20" autocomplete="off" />
+								</div>
+							</div>
+							<div id="profession-container" class="form-group">
+								<label class="control-label col-md-2">职业：</label>
+								<div class="col-md-5">
+									<input id="profession" name="profession" type="text" class="form-control" maxlength="20" autocomplete="off" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-2">邮箱：</label>
+								<div class="col-md-5">
+									<input id="email" name="email" type="email" class="form-control" maxlength="20" autocomplete="off" />
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+							<button type="submit" class="btn btn-default">修改</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!--上传头像-->
+		<input style="display: none" type="file" id="photo" name="photo" readonly accept="image/*" />
+
+		<!--个人资料js-->
+		<script>
+            var power = window.localStorage.getItem("power");
+            switch (power){
+                // 学生
+                case "1":
+                    $("#work").css("display","block");
+                    $("#_resume").css("display","block");
+                    $("#resumemgr").css("display","block");
+                    $("#eduIdentify").css("display","block");
+                    break;
+                // 家长
+                case "2":
+                    $("#teacher").css("display","block");
+                    $("#_recruit").css("display","block");
+                    $("#recruitmgr").css("display","block");
+                    break;
+            }
+            // 载入个人资料页面
+            function userInfoPage(){
+                var uid = getDecodeUid();
+                var t = document.getElementById('user-info');
+                var p = t.content.querySelectorAll("p");
+                var img = t.content.querySelectorAll("img");
+                $.ajax({
+                    type:"get",
+                    url:"/personalInfo",
+                    data:{uid:uid},
+                    async:false,
+                    dataType:"json",
+                    success:function (user) {
+                        $("#name-tip").html(user.nickname);
+                        img[0].src = "../../" + user.photo;
+                        p[0].childNodes[0].textContent = "ID/用户名：" + user.uid;
+                        p[1].textContent = "注册时间：" + getFormatDate(user.regist_time);
+                        p[2].childNodes[0].textContent = "昵称：" + user.nickname;
+                        p[2].childNodes[1].textContent = "修改资料";
+                        p[3].textContent = "姓名：" + nullTransferEmptyString(user.uname);
+                        p[4].textContent = "年龄：" + user.age;
+                        p[5].textContent = "性别：" + nullTransferEmptyString(user.sex);
+                        switch (power){
+                            case "1":
+                                let school = "院校：";
+                                let degree = "学历：";
+                                if(user.isIdentify == 1){
+                                    school =  school + nullTransferEmptyString(user.school) + "&nbsp<span style='color: red;'>已认证</span>";
+                                    degree =  degree + nullTransferEmptyString(user.degree) + "&nbsp<span style='color: red;'>已认证</span>";
+                                }else if(user.isIdentify == 0 && user.studentCard != null) {
+                                    school = school + nullTransferEmptyString(user.school) + "&nbsp<span style='color: red;'>审核中</span>";
+                                    degree = degree + nullTransferEmptyString(user.degree) + "&nbsp<span style='color: red;'>审核中</span>";
+                                }else if(user.isIdentify == 2) {
+                                    school = school + nullTransferEmptyString(user.school) + "&nbsp<span style='color: red;'>未通过</span>";
+                                    degree = degree + nullTransferEmptyString(user.degree) + "&nbsp<span style='color: red;'>未通过</span>";
+                                }
+                                p[6].innerHTML = school;
+                                p[7].innerHTML = degree;
+                                p[9].textContent = "职业：" + nullTransferEmptyString(user.profession);
+                                break;
+                            case "2":
+                                p[8].textContent = "单位：" + nullTransferEmptyString(user.unit);
+                                break;
+                        }
+                        p[10].textContent = "手机：" + user.phone;
+                        p[11].textContent = "邮箱：" + nullTransferEmptyString(user.email);
+                    }
+                })
+                var tClone = document.importNode(t.content, true);//克隆,如果不用这个,直接就用t.content会有一些问题(template内容被使用后会消失)
+                $("#main-body").html(tClone);
+            }
+
+            // 向模态框传数据
+            function transmitParmsToModal() {
+                var uid = getDecodeUid();
+                $.ajax({
+                    type:"get",
+                    url:"/personalInfo",
+                    data:{uid:uid},
+                    dataType:"json",
+                    success:function (user) {
+                        switch (power){
+                            case "1":
+                                $("#unit-container").hide();
+                                break;
+                            case "2":
+                                $("#profession-container").hide();
+                                break;
+                        }
+                        if(uname != null){
+                            $("#uname").attr("readonly","readonly");
+						}
+                        $("#nickname").val(user.nickname);
+                        $("#uname").val(user.uname);
+                        $("#age").val(user.age);
+                        $("#sex").val(user.sex);
+                        $("#email").val(user.email);
+                        $("#unit").val(user.unit);
+                        $("#profession").val(user.profession);
+                    }
+                })
+            }
+            //修改资料
+            $("#modifyUserInfoForm").on("submit",function (e) {
+                e.preventDefault();
+                var uid = getDecodeUid();
+                var form = new FormData(document.getElementById("modifyUserInfoForm"));//把表单的对象作为一个参数
+                form.append("uid",uid);
+                $.ajax({
+                    type:"post",
+                    url:"/updateUser",
+                    data:form,
+                    dataType:"text",
+                    processData:false,
+                    contentType:false,
+                    success:function (data) {
+                        if(data=="success"){
+                            alert("更新成功");
+                        }else if(data=="failure"){
+                            alert("更新失败");
+                        }
+                    },
+                    error:function () {
+                        alert("请求异常");
+                    }
+                })
+            })
+            // 触发上传头像input被点击
+            function uploadPhoto() {
+                $("#photo").click();
+            }
+            //头像回显并向后台提交更换头像请求
+            $('#photo').bind('change',function(){
+                var fils=$("#photo").get(0).files[0];  //得到file对象
+				var fileSize = fils.size;//文件大小，单位b
+				var fileType = fils.type;//文件类型
+				var fileTypeString = "image/jpeg;image/jpg;image/png";
+				if(fileTypeString.indexOf(fileType) != -1){
+				    if(fileSize <= 1024*1024*5){//上传文件不大于5M
+                        var srcc=window.URL.createObjectURL(fils);     //传入的参数创建一个指向该参数对象的URL
+                        console.log(srcc);
+                        document.getElementById("user-img").src = srcc;
+                        // $("#my-photo").attr('src',srcc);
+                        var uid = getDecodeUid();
+                        var formData = new FormData();
+                        formData.append("uid",uid);
+                        formData.append("photo",fils);
+                        $.ajax({
+                            type:"post",
+                            url:"/uploadPhoto",
+                            data:formData,
+                            dataType:"text",
+                            processData:false,
+                            contentType:false,
+                            success:function (data) {
+                                if(data=="success"){
+                                    alert("更新成功");
+                                }else if(data=="error"){
+                                    alert("更新失败");
+                                }
+                            }
+                        })
+					}else {
+				        alert("请上传不大于5M的照片");
+					}
+				}else {
+				    alert("请上传jpg、jpeg、png格式图片");
+				}
+            });
+            // null值转变空串
+            function nullTransferEmptyString(str) {
+                if(str == null){
+                    return "";
+                }
+                return str;
+            }
+            // 格式：yyyy-MM-dd HH:mm:SS
+            function getFormatDate(dateString){
+                var nowDate = new Date(dateString);
+                var year = nowDate.getFullYear();
+                var month = nowDate.getMonth() + 1 < 10 ? "0" + (nowDate.getMonth() + 1) : nowDate.getMonth() + 1;
+                var date = nowDate.getDate() < 10 ? "0" + nowDate.getDate() : nowDate.getDate();
+                var hour = nowDate.getHours()< 10 ? "0" + nowDate.getHours() : nowDate.getHours();
+                var minute = nowDate.getMinutes()< 10 ? "0" + nowDate.getMinutes() : nowDate.getMinutes();
+                var second = nowDate.getSeconds()< 10 ? "0" + nowDate.getSeconds() : nowDate.getSeconds();
+                return year + "-" + month + "-" + date+" "+hour+":"+minute+":"+second;
+            }
+		</script>
+		<!--修改密码js-->
+		<script>
+            // 载入修改密码页面
+            function modifyPwdPage(){
+                // let t = document.getElementById("modify-pwd"),
+                var t = document.querySelector('#modify-pwd');
+                var tClone = document.importNode(t.content, true);
+                $("#main-body").html(tClone);
+            }
+            // 眼睛
+            function eyeChange() {
+                if($("#eye").hasClass('glyphicon-eye-close')){
+                    $("#eye").removeClass("glyphicon-eye-close");
+                    $("#eye").addClass("glyphicon-eye-open");
+                    $("#npwd").attr("type","text");
+                }else if($("#eye").hasClass('glyphicon-eye-open')){
+                    $("#eye").removeClass("glyphicon-eye-open");
+                    $("#eye").addClass("glyphicon-eye-close");
+                    $("#npwd").attr("type","password");
+                }
+            }
+            // 重置
+            function resetForm(){
+                $("#modifyPwdForm")[0].reset();
+            }
+            // 密码长度验证
+            function pwdLengthCheck() {
+                if($("#npwd").val().length < 6){
+                    $("#npwd-tip").html("不能少于6位");
+                    $("#npwd").val("");
+                }else {
+                    $("#npwd-tip").html("");
+                }
+            }
+            //原密码校验
+            function checkOldPwd() {
+                var uid = getDecodeUid();
+                var oldpwd = $("#opwd").val();
+                $.ajax({
+                    type:"get",
+                    url:"/checkOldPwd",
+                    data:{uid:uid,oldpwd:oldpwd},
+                    dataType:"text",
+                    success:function (data) {
+                        if(data=="false"){
+                            $("#opwd-tip").html("密码不正确");
+                            resetForm();
+                        }else if (data=="true"){
+                            $("#opwd-tip").html("");
+                        }
+                    }
+                })
+            }
+            //密码修改
+            function modifyUserPwd() {
+                var oldpwd = $("#opwd").val();
+                var newpwd = $("#npwd").val();
+                if(oldpwd != "" && newpwd != ""){
+                    var uid = getDecodeUid();
+                    $.ajax({
+                        type:"get",
+                        url:"/modifyUserPwd",
+                        data:{uid:uid,pwd:newpwd},
+                        dataType:"text",
+                        success:function (data) {
+                            if(data=="success"){
+                                alert("密码修改成功");
+                                resetForm();
+                                $("#npwd-tip").html("");//如果出现红色字体提示，提交后去掉
+                            }
+                        },
+                        error:function () {
+                            alert("密码修改异常");
+                        }
+                    })
+                }
+            }
+		</script>
+        <!--学历认证-->
+        <script>
+            // 载入学历认证页面
+            function eduIdentify(){
+                var t = document.querySelector('#education-certification');
+                var tClone = document.importNode(t.content, true);
+                $("#main-body").html(tClone);
+                //学历认证
+                $("#ec-form").bind("submit",function (e) {
+                    e.preventDefault();
+                    var uid = getDecodeUid();
+                    var form = new FormData(document.getElementById("ec-form"));//把表单的对象作为一个参数
+                    form.append("uid",uid);
+                    $.ajax({
+                        type:"post",
+                        url:"/educationCertification",
+                        data:form,
+                        dataType:"text",
+                        processData:false,
+                        contentType:false,
+                        success:function (data) {
+                            if(data=="success"){
+                                alert("提交成功");
+                            }else if(data=="failure"){
+                                alert("提交失败");
+                            }
+                        },
+                        error:function () {
+                            alert("请求失败");
+                        }
+                    })
+                })
+            }
+        </script>
+		<!--我的简历-->
+		<script>
+            // 载入我的简历页面
+            function resumePage(){
+                var uid = getDecodeUid();
+                var t = document.querySelector('#resume');
+                $.ajax({
+					type:"get",
+					cache:false,
+					url:"/getResumeByUid",
+					data:{uid:uid},
+					dataType:"json",
+					success:function (resumeList) {
+                        console.log(resumeList);
+                        for (var i = 0; i < resumeList.length; i++) {
+                            var tr = document.querySelector('#produceRow'),
+                                td = tr.content.querySelectorAll("td");
+                            td[0].textContent = resumeList[i].subject;
+                            td[1].textContent = getFormatDate(resumeList[i].send_time);//发布时间
+                            td[2].setAttribute("onclick", "deleteResume(this," + resumeList[i].id + ")");//删除
+                            td[3].setAttribute("onclick", "modifyResume(" + resumeList[i].id + ")");//编辑
+							$(td[4]).attr("onclick","updateResumeSendTimeById(this,"+resumeList[i].id+")");//刷新
+                            $(td[5]).children("input").eq(0).val(resumeList[i].id);//将简历的id赋给input的value
+							$(td[5]).children("input").eq(0).attr("onclick","issue(this)");//添加onclick事件
+                            if (resumeList[i].status == 1) {//如果处于发布状态，将选项选上
+                                $(td[5]).children("input").eq(0).prop("checked", true);
+                            }else {
+                                $(td[5]).children("input").eq(0).prop("checked", false);
+							}
+
+							// 克隆新行并将其插入表中
+							var tb = document.getElementById("resume-tbody");
+							var clone = document.importNode(tr.content, true);
+							tb.appendChild(clone);
+                        }
+                    }
+				})
+                
+                var tClone = document.importNode(t.content, true);
+                $("#main-body").html(tClone);
+            }
+
+            //发布、取消发布简历（更新发布状态）
+            function issue(obj){
+                if($(obj).is(":checked")){
+                    updateResumeStatusById($(obj).val(),1);
+                }else{
+                    updateResumeStatusById($(obj).val(),0);
+                }
+            }
+
+            //更新简历的发布状态
+            function updateResumeStatusById(id, status) {
+				$.ajax({
+					type:"post",
+					cache:false,
+					url:"/updateResumeStatusById",
+					data:{id:id,status:status},
+					dataType:"text",
+					success:function (resp) {
+						if(resp == "success"){
+						    console.log("operation success");
+						}else{
+						    alert("操作失败");
+						}
+                    },
+					error:function () {
+						alert("请求失败");
+                    }
+				})
+            }
+
+            //删除简历
+            function deleteResume(obj,id) {
+				$.ajax({
+					type:"post",
+					url:"/deleteResumeById",
+					data:{id:id},
+					dataType:"text",
+					success:function (result) {
+						if(result == "success"){
+							$(obj.parentNode).remove();
+						}else if(result == "error"){
+							alert("删除失败");
+						}
+                    },
+					error:function () {
+						alert("请求失败");
+                    }
+                    })
+            }
+
+            //根据简历id更新简历发布时间
+            function updateResumeSendTimeById(obj,id) {
+				$.ajax({
+					type:"post",
+					url:"/updateResumeSendTimeById",
+					data:{id:id},
+					dataType:"json",
+					success:function (resp) {
+						if(resp.status){
+						    console.log("refresh success");
+                            $(obj).parent().children("td").eq(1).html(getFormatDate(resp.resume.send_time));
+						}else{
+						    alert("刷新失败");
+						}
+                    },
+					error:function () {
+						alert("请求失败");
+                    }
+				})
+            }
+
+            // 编辑简历
+			function modifyResume(id) {
+                window.location.href="/html/personal/fe-modify-resume.html?id="+id;
+            }
+		</script>
+		<!--我的招聘-->
+		<script>
+            // 载入我的招聘页面
+            function recruitPage(){
+                var uid = getDecodeUid();
+                var t = document.querySelector('#recruit');
+                $.ajax({
+                    type:"get",
+                    cache:false,
+                    url:"/getRecruitByUid",
+                    data:{uid:uid},
+                    dataType:"json",
+                    success:function (recruitList) {
+                        console.log(recruitList);
+                        for (var i = 0; i < recruitList.length; i++) {
+                            var tr = document.querySelector('#produceRow'),
+                                td = tr.content.querySelectorAll("td");
+                            td[0].textContent = recruitList[i].subject;
+                            td[1].textContent = getFormatDate(recruitList[i].send_time);//发布时间
+                            td[2].setAttribute("onclick", "deleteRecruit(this," + recruitList[i].id + ")");//删除
+                            td[3].setAttribute("onclick", "modifyRecruit(" + recruitList[i].id + ")");//编辑
+                            $(td[4]).attr("onclick","updateRecruitSendTimeById(this,"+recruitList[i].id+")");//刷新
+                            $(td[5]).children("input").eq(0).val(recruitList[i].id);//将招聘的id赋给input的value
+                            $(td[5]).children("input").eq(0).attr("onclick","issueRecruit(this)");//添加onclick事件
+                            if (recruitList[i].status == 1) {//如果处于发布状态，将选项选上
+                                $(td[5]).children("input").eq(0).prop("checked", true);
+                            }else {
+                                $(td[5]).children("input").eq(0).prop("checked", false);
+                            }
+
+                            // 克隆新行并将其插入表中
+                            var tb = document.getElementById("recruit-tbody");
+                            var clone = document.importNode(tr.content, true);
+                            tb.appendChild(clone);
+                        }
+                    }
+                })
+
+                var tClone = document.importNode(t.content, true);
+                $("#main-body").html(tClone);
+            }
+
+            //发布、取消发布招聘（更新发布状态）
+            function issueRecruit(obj){
+                if($(obj).is(":checked")){
+                    updateRecruitStatusById($(obj).val(),1);
+                }else{
+                    updateRecruitStatusById($(obj).val(),0);
+                }
+            }
+
+            //更新招聘的发布状态
+            function updateRecruitStatusById(id, status) {
+                $.ajax({
+                    type:"post",
+                    cache:false,
+                    url:"/updateRecruitStatusById",
+                    data:{id:id,status:status},
+                    dataType:"text",
+                    success:function (resp) {
+                        if(resp == "success"){
+                            console.log("operation success");
+                        }else{
+                            alert("操作失败");
+                        }
+                    },
+                    error:function () {
+                        alert("请求失败");
+                    }
+                })
+            }
+
+            //删除招聘
+            function deleteRecruit(obj,id) {
+                $.ajax({
+                    type:"post",
+                    url:"/deleteRecruitById",
+                    data:{id:id},
+                    dataType:"text",
+                    success:function (result) {
+                        if(result == "success"){
+                            $(obj.parentNode).remove();
+                        }else if(result == "error"){
+                            alert("删除失败");
+                        }
+                    },
+                    error:function () {
+                        alert("请求失败");
+                    }
+                })
+            }
+
+            //根据招聘id更新招聘发布时间
+            function updateRecruitSendTimeById(obj,id) {
+                $.ajax({
+                    type:"post",
+                    url:"/updateRecruitSendTimeById",
+                    data:{id:id},
+                    dataType:"json",
+                    success:function (resp) {
+                        if(resp.status){
+                            console.log("refresh success");
+                            $(obj).parent().children("td").eq(1).html(getFormatDate(resp.recruit.send_time));
+                        }else{
+                            alert("刷新失败");
+                        }
+                    },
+                    error:function () {
+                        alert("请求失败");
+                    }
+                })
+            }
+
+            // 编辑招聘
+            function modifyRecruit(id) {
+                window.location.href="/html/personal/fe-modify-recruit.html?id="+id;
+            }
+		</script>
+		<!--主页面js-->
+		<script>
+			// 打开页面首先加载个人资料部分内容
+			$(function(){
+				userInfoPage();
+			})
+
+			// 左侧菜单
+			$(function () {
+				$(function(){
+					$('#ul2').on('click','li',function(){
+						$(this).addClass('live');
+						$(this).siblings().removeClass('live');
+					})
+				})
+			})
+		</script>
+		<!--页面跳转-->
+		<script>
+			// 未解码uid获取
+            function getUid() {
+                //页面跳转部分
+                var currentUrl = window.location.href;
+                var dataList = currentUrl.split("?");
+                var start = dataList[1].indexOf("=");
+                var uid = dataList[1].substring(start+1);
+                return uid
+            }
+            // 解码后uid获取
+			function getDecodeUid() {
+                var aseKey = "12345678";
+                var encryptUid = getUid();
+                var uid = CryptoJS.AES.decrypt(encryptUid, CryptoJS.enc.Utf8.parse(aseKey), {
+                    mode: CryptoJS.mode.ECB,
+                    padding: CryptoJS.pad.Pkcs7
+                }).toString(CryptoJS.enc.Utf8);
+                return uid;
+            }
+			// 发布招聘
+            function toSendRecruitPage() {
+                var uid = getUid();
+                window.location.href="/html/infoissue/fe-post-recruit.html?uid="+uid;
+            }
+            // 家教招聘
+            function toFe_workPage() {
+                var uid = getUid();
+                window.location.href="/html/infoissue/fe-tutor-recruit.html?uid="+uid;
+            }
+            // 家教投简
+            function toFe_tutorPage() {
+                var uid = getUid();
+                window.location.href="/html/infoissue/fe-tutor-resume.html?uid="+uid;
+            }
+            // 发布简历
+            function toSendApplyPage() {
+                var uid = getUid();
+                window.location.href="/html/infoissue/fe-post-resume.html?uid="+uid;
+            }
+            // 在线聊天
+            function toChatPage() {
+                var uid = getUid();
+                window.location.href="/html/chat.html?uid="+uid;
+            }
+            // 添加简历
+            function toAddResumePage() {
+                var uid = getUid();
+                window.location.href="/html/personal/fe-add-resume.html?uid="+uid;
+            }
+            //添加招聘
+			function toAddRecruitage() {
+                var uid = getUid();
+                window.location.href="/html/personal/fe-add-recruit.html?uid="+uid;
+            }
+		</script>
+		<!--用于解决手机端点一下返回键就退出的问题 让它返回上一页面-->
+		<script src="../../js/common/resolveAppBack.js"></script>
+		<svg height="0" xmlns="http://www.w3.org/2000/svg">
+		    <defs>
+		        <filter id="red">
+		               <feColorMatrix values="
+								0 0 0 0 255
+		                        0 0 0 0 0
+		                        0 0 0 0 0
+		                        0 0 0 1 0" />
+		        </filter>
+				<filter id="blue">
+				       <feColorMatrix values="
+								0 0 0 0 0
+				                0 0 0 0 0
+				                0 0 0 0 255
+				                0 0 0 1 0" />
+				</filter>
+				<filter id="green">
+				       <feColorMatrix values="
+								0 0 0 0 0
+				                0 0 0 0 255
+				                0 0 0 0 0
+				                0 0 0 1 0" />
+				</filter>
+		    </defs>
+		</svg>
+	</body>
+</html>

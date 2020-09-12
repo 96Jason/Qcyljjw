@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<!-- Bootstrap -->
+		<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
+		<script src="../../js/common/jquery-3.4.1.min.js"></script>
+		<script src="../../bootstrap/js/bootstrap.min.js"></script>
+		<style>
+			.grid{
+				height: 253px;
+				width: 100%;
+				text-align: right;
+				background-color: #eef5f9;
+				border-radius: 5px;
+				box-shadow: 3px 3px 6px #796aee;
+			}
+			img{
+				height: 210px;
+				width: 100%;
+				border-radius: 5px;
+			}
+			.button-style-2{
+				border: 0;
+				border-radius: 5px;
+				outline: none;
+				color: #796aee;
+				margin-top: 6px;
+				width: 60px;
+				height: 30px;
+			}
+			.button-style-2:hover{
+				color: red;
+			}
+			.tip-box{
+				display: none;
+				position: fixed;
+				width: 200px;
+				height: 100px;
+				background-color: white;
+				border-radius: 10px;
+				padding: 10px;
+				text-align: center;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%,-50%);
+			}
+			.mask{
+				top: 0;
+				left: 0;
+				display: none;
+				position: absolute;
+				background-color: rgba(0, 0, 0, 0.5);
+			}
+			.button-style-1{
+				border: 0;
+				border-radius: 5px;
+				outline: none;
+				color: white;
+				font-size: 1.2rem;
+				margin-top: 6px;
+				width: 60px;
+				height: 30px;
+				line-height: 30px;
+				background-color: #66cc33;
+			}
+			.tip-div-style-1{
+				height: 50px;
+				line-height: 50px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container-fluid">
+			<div class="row" style="padding-top: 10px;">
+				<div class="col-md-4">
+					<div class="grid">
+						<img id="first-photo" src="../../../carousel/first.jpg" />
+						<button class="button-style-2" type="button" onclick="upload('first')">更换</button>
+						<input type="file" name="first" id="first" accept=".jpg,.jpeg,.png" style="display: none;" onchange="whenInputChange('first')"/>
+					</div>					
+				</div>
+				<div class="col-md-4">
+					<div class="grid">
+						<img id="second-photo" src="../../../carousel/second.jpg" />
+						<button class="button-style-2" type="button" onclick="upload('second')">更换</button>
+						<input type="file" name="second" id="second" accept=".jpg,.jpeg,.png" style="display: none;" onchange="whenInputChange('second')"/>
+					</div>					
+				</div>
+				<div class="col-md-4">
+					<div class="grid">
+						<img id="third-photo" src="../../../carousel/third.jpg" />
+						<button class="button-style-2" type="button" onclick="upload('third')">更换</button>
+						<input type="file" name="third" id="third" accept=".jpg,.jpeg,.png" style="display: none;" onchange="whenInputChange('third')"/>
+					</div>					
+				</div>
+			</div>
+			<div class="row" style="padding-top: 30px;">
+				<div class="col-md-4">
+					<div class="grid">
+						<img id="fourth-photo" src="../../../carousel/fourth.jpg" />
+						<button class="button-style-2" type="button" onclick="upload('fourth')">更换</button>
+						<input type="file" name="fourth" id="fourth" accept=".jpg,.jpeg,.png" style="display: none;" onchange="whenInputChange('fourth')"/>
+					</div>					
+				</div>
+				<div class="col-md-4">
+					<div class="grid">
+						<img id="fifth-photo" src="../../../carousel/fifth.jpg" />
+						<button class="button-style-2" type="button" onclick="upload('fifth')">更换</button>
+						<input type="file" name="fifth" id="fifth" accept=".jpg,.jpeg,.png" style="display: none;" onchange="whenInputChange('fifth')"/>
+					</div>					
+				</div>
+			</div>
+		</div>
+		<!--弹出框-->
+		<div class="mask"></div>
+		<div class="tip-box">
+			<div id="title" class="tip-div-style-1"></div>
+			<button class="button-style-1" onclick="closeBox()">OK</button>
+		</div>
+	</body>
+	<script>
+		function upload(location) {
+			$("#"+location).click();
+			//图片回显
+			//这种方式会向后台提交二次（未解决）
+			// $("#"+location).bind('change',function () {
+			//
+            // })
+        }
+
+        function whenInputChange(location) {
+		    //图片回显
+            var file = $("#"+location).get(0).files[0];
+            var srcUrl = window.URL.createObjectURL(file);
+            $("#"+location+"-photo").attr("src",srcUrl);
+            //图片上传到后台
+            var forData = new FormData();
+            forData.append("file",file);
+            forData.append("location",location);
+            $.ajax({
+                type:"post",
+                url:"/modifyAdvertisingPhoto",
+                data:forData,
+                processData: false ,
+                contentType: false ,
+                async:false,
+                success:function (result) {
+                    if(result == 1){
+                        popupBox('修改成功');
+                    }else {
+                        popupBox('图片修改失败');
+                    }
+                },
+                error:function () {
+                    popupBox('系统出错');
+                }
+            })
+        }
+
+        //弹出框
+        function popupBox(data) {
+            $('.mask').css('display', 'block');
+            $('.mask').css('width', $(window).width())
+            $('.mask').css('height', $(document).height())
+            $('#title').html(data);
+            $('.tip-box').slideToggle();
+            // $('.tip-box').css('display', 'block');
+        }
+        // 关闭弹出框
+        function closeBox() {
+            $('.tip-box').slideToggle();
+            // $('.tip-box').css('display', 'none');
+            $('.mask').css('display', 'none');
+        }
+	</script>
+</html>
